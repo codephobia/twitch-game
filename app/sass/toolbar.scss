@@ -1,0 +1,49 @@
+.toolbar {
+    position: absolute;
+    padding: 10px;
+    text-align: right;
+
+    &.toolbar-top {
+        top: 0px;
+        right: 0px;
+    }
+    
+    &.toolbar-bottom {
+        bottom: 0px;
+        left: 0px;
+    }
+
+    ul {
+        margin-bottom: 0px;
+
+        li {
+            margin-right: 10px;
+            display: inline-block;
+            list-style: none;
+
+            &:last-child {
+                margin-right: 0px;
+            }
+            
+            button {
+                border: none;
+                background: transparent;
+                outline: none;
+                font-size: 30px;
+                color: rgba(255,255,255,.3);
+                transition: color .2s ease-in;
+                
+                &.btn-settings {
+                    margin-right: 20px;
+                }
+
+                &.btn-close {
+                }
+                
+                &:hover {
+                    color: rgba(255,255,255,.8);
+                }
+            }
+        }
+    }
+}

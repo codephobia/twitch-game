@@ -1,0 +1,7 @@
+app/node_modules
+app/vendor
+app/build
+
+web/node_modules
+web/vendor
+web/build
