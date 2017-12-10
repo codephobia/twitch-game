@@ -6,6 +6,8 @@ const debug = require('./lib/debug');
 const path = require('path');
 const url = require('url');
 
+const oauth = require('./lib/oauth');
+
 let mainWindow;
 
 function createWindow() {
@@ -23,7 +25,8 @@ function createWindow() {
     }));
 
     debug.init(mainWindow);
-
+    oauth.init(mainWindow);
+    
     mainWindow.on('closed', function () {
         mainWindow = null;
     });

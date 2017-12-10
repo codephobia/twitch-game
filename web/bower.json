@@ -1,7 +1,7 @@
 {
-  "name": "twitch-game",
+  "name": "twitch-game-web",
   "description": "",
-  "main": "main.js",
+  "main": "server/server.js",
   "authors": [
     "Codephobia"
   ],

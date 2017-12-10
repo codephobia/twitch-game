@@ -1,0 +1,13 @@
+{
+    "mongodb": {
+        "url": "mongodb://localhost:27017/twitch-game",
+        "name": "mongodb",
+        "connector": "loopback-connector-mongodb",
+        "server": {
+            "auto_reconnect": true,
+            "reconnectTries": 100,
+            "reconnectInterval": 1000
+        },
+        "allowExtendedOperators": true
+    }
+}

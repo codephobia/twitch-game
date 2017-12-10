@@ -1,0 +1,38 @@
+{
+  "name": "accessToken",
+  "base": "AccessToken",
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
+    "ttl": {
+      "type": "number",
+      "ttl": true,
+      "default": 1209600,
+      "description": "time to live in seconds (2 weeks by default)"
+    },
+    "scopes": {
+      "type": ["string"],
+      "description": "Array of scopes granted to this access token."
+    },
+    "created": {
+      "type": "Date",
+      "defaultFn": "now"
+    }
+  },
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "userId"
+    }
+  },
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ]
+}

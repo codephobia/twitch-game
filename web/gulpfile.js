@@ -2,22 +2,25 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var runSequence = require('run-sequence');
-var runElectron = require("gulp-run-electron");
 var lbAngular = require('gulp-loopback-sdk-angular');
 var rename = require('gulp-rename');
 var path = require('path');
 var del = require('del');
+var nodemon = require('gulp-nodemon');
+
+var NODE_ENV = process.env.NODE_ENV || 'development';
 
 // paths
 var paths = {
-    sass:   'sass/**/*.scss',
-    fonts:  'sass/fonts/**/*',
-    html:   'html/**/*.html',
-    js:     'js/**/*.js',
-    img:    'img/**/*',
-    vendor: 'vendor/',
-    build:  'build/',
-    dist:   'build/dist/'
+    sass:   'client/sass/**/*.scss',
+    fonts:  'client/sass/fonts/**/*',
+    html:   'client/views/**/*.html',
+    js:     'client/js/**/*.js',
+    img:    'client/img/**/*',
+    vendor: 'client/vendor/',
+    models: 'common/models/**/*',
+    build:  'client/build/',
+    dist:   'client/build/dist/'
 };
 
 // sass
@@ -69,7 +72,6 @@ gulp.task('sass:watched', function (callback) {
     return runSequence(
         'sass:build',
         'sass:concat',
-        'electron:restart',
         callback
     );
 });
@@ -95,7 +97,7 @@ gulp.task('fonts:vendor', function () {
 // html
 gulp.task('html', function () {
     gulp.src(paths.html)
-        .pipe(gulp.dest(paths.dist + 'html'));
+        .pipe(gulp.dest(paths.dist + 'views'));
 });
 
 // html - watch
@@ -107,7 +109,6 @@ gulp.task('html:watch', function () {
 gulp.task('html:watched', function (callback) {
     return runSequence(
         'html',
-        'electron:restart',
         callback
     );
 });
@@ -148,7 +149,6 @@ gulp.task('js:app:watched', function (callback) {
     return runSequence(
         'js:app:build',
         'js:app:concat',
-        'electron:restart',
         callback
     );
 });
@@ -198,19 +198,9 @@ gulp.task('img:watch', function () {
 gulp.task('img:watched', function (callback) {
     return runSequence(
         'img',
-        'electron:restart',
         callback
     );
 });
-
-// electron - run
-gulp.task('electron:run', function () {
-    gulp.src('./')
-        .pipe(runElectron([], {cwd: __dirname}));
-});
-
-// electron restart
-gulp.task('electron:restart', runElectron.rerun);
 
 // lb services
 gulp.task('lb-ng', function (callback) {
@@ -223,10 +213,8 @@ gulp.task('lb-ng', function (callback) {
 
 // lb services - build
 gulp.task('lb-ng:build', function () {
-    gulp.src(path.join('..', 'web', 'server', 'server.js'))
-        .pipe(lbAngular({
-            apiUrl: 'http://localhost:3000/api'
-        }))
+    return gulp.src(path.join('server', 'server.js'))
+        .pipe(lbAngular())
         .pipe(rename('lb-services.js'))
         .pipe(gulp.dest(paths.dist + 'js'))
 });
@@ -236,12 +224,31 @@ gulp.task('lb-ng:clean', function () {
     return del(path.join(paths.dist + 'js', "*lb-services.js"))
 });
 
+// lb services - watch
+gulp.task('lb-ng:watch', function () {
+    return gulp.watch(paths.models, ['lb-ng']);
+});
+
+// nodemon
+gulp.task('nodemon', function () {
+    nodemon({
+        script: path.join('server', 'server.js'),
+        ext: 'js json',
+        env: { 'NODE_ENV': NODE_ENV },
+        watch: [
+            path.join('server', '**', '*'),
+            path.join('common', 'models'),
+            path.join('modules', '**', 'common', 'models')
+        ]
+    });
+});
+
 // default gulp
 gulp.task('default', function (callback) {
-    runSequence(
+    return runSequence(
         ['css', 'html', 'js', 'img', 'lb-ng'],
-        ['sass:watch', 'fonts:watch', 'html:watch', 'js:app:watch', 'img:watch'],
-        'electron:run',
+        ['sass:watch', 'fonts:watch', 'html:watch', 'js:app:watch', 'img:watch', 'lb-ng:watch'],
+        'nodemon',
         callback
     );
 });

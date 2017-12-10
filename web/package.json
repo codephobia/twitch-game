@@ -1,0 +1,48 @@
+{
+  "name": "twitch-game-web",
+  "version": "1.0.0",
+  "main": "server/server.js",
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "start": "node .",
+    "posttest": "npm run lint && nsp check"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "compression": "^1.0.3",
+    "consolidate": "^0.15.0",
+    "cors": "^2.5.2",
+    "dustjs-linkedin": "^2.7.5",
+    "helmet": "^1.3.0",
+    "loopback": "^3.0.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-component-explorer": "^5.0.0",
+    "loopback-component-passport": "^3.4.1",
+    "loopback-connector-mongodb": "^3.3.1",
+    "passport-twitch": "^1.0.3",
+    "serve-favicon": "^2.0.1",
+    "strong-error-handler": "^2.0.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "eslint": "^3.17.1",
+    "eslint-config-loopback": "^8.0.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-loopback-sdk-angular": "^0.2.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "nsp": "^2.1.0",
+    "run-sequence": "^2.2.0"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "UNLICENSED",
+  "description": "twitch-game-web"
+}

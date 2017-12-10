@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="AppCtrl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Twitch Game</title>
+    <base href="/">
+    
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="client/build/dist/css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="client/build/dist/css/styles.css">
+</head>
+
+<body layout="column" layout-fill>
+    <!-- root -->
+    <div ui-view="root" layout-fill></div>
+    
+    <!-- js -->
+    <script type="text/javascript" src="client/build/dist/js/vendor.js"></script>
+    <script type="text/javascript" src="client/build/dist/js/lb-services.js"></script>
+    <script type="text/javascript" src="client/build/dist/js/app.js"></script>
+</body>
+
+</html>

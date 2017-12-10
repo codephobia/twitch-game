@@ -7,8 +7,7 @@ var app = angular.module('app', [
     'lbServices',
     'app.controllers',
     'app.services',
-    'app.directives',
-    'app.filters'
+    'app.directives'
 ])
 .run([
     '$cookies', 'LoopBackAuth', 'LoginService', 
@@ -28,19 +27,26 @@ var app = angular.module('app', [
     }
 ])
 .config([
-    '$stateProvider', '$locationProvider', '$urlRouterProvider', 
+    '$stateProvider', '$locationProvider', '$urlRouterProvider',  
     function ($stateProvider, $locationProvider, $urlRouterProvider) {
+        
+        // template path
+        var tpl = './client/build/dist/views/';
+        
+        // html5 mode
         $locationProvider.html5Mode(true);
         
+        // otherwise handler
         $urlRouterProvider.otherwise('/');
         
+        // root app states
         $stateProvider
         .state('app', {
             abstract: true,
             url: '/',
             views: {
                 root: {
-                    templateUrl: 'game.html'
+                    templateUrl: tpl + 'index.html'
                 }
             },
             resolvePolicy: {
@@ -76,9 +82,8 @@ var app = angular.module('app', [
         .state('app.login', {
             url: '',
             views: {
-                game: {
-                    templateUrl: 'login.html',
-                    controller: 'LoginCtrl'
+                index: {
+                    templateUrl: tpl + 'login.html'
                 }
             },
             onEnter: ['$state', 'User', function ($state, User) {
@@ -91,9 +96,8 @@ var app = angular.module('app', [
             abstract: true,
             url: 'games',
             views: {
-                game: {
-                    templateUrl: 'games.html',
-                    controller: 'GamesCtrl'
+                index: {
+                    templateUrl: tpl + 'games.html'
                 }
             },
             onEnter: ['$state', 'User', function ($state, User) {
@@ -106,7 +110,8 @@ var app = angular.module('app', [
             url: '',
             views: {
                 games: {
-                    templateUrl: 'games.home.html'
+                    templateUrl: tpl + 'games.home.html',
+                    controller: 'GamesCtrl'
                 }
             }
         });
@@ -116,4 +121,3 @@ var app = angular.module('app', [
 angular.module('app.controllers', []);
 angular.module('app.services', []);
 angular.module('app.directives', []);
-angular.module('app.filters', []);

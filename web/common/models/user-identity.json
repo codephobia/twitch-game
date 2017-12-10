@@ -1,0 +1,51 @@
+{
+    "name": "userIdentity",
+    "plural": "userIdentities",
+    "base": "PersistedModel",
+    "strict": true,
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "provider": {
+            "type": "string"
+        },
+        "authScheme": {
+            "type": "String"
+        },
+        "externalId": {
+            "type": "string"
+        },
+        "profile": {
+            "type": "object"
+        },
+        "credentials": {
+            "type": "object"
+        },
+        "userId": {
+            "index": 1
+        },
+        "created": "Date",
+        "modified": "Date"
+    },
+    "relations": {
+        "user": {
+            "type": "belongsTo",
+            "model": "user",
+            "foreignKey": "userId"
+        }
+    },
+    "acls": [
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "DENY"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW"
+        }
+    ]
+}

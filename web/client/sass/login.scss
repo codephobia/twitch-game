@@ -1,0 +1,32 @@
+.login {
+    text-align: center;
+
+    .game-title {
+        margin-bottom: 50px;
+        color: #fff;
+        font-weight: 100;
+        letter-spacing: 1px;
+    }
+    
+    .btn-login {
+        padding: 20px;
+        color: #fff;
+        font-size: 20px;
+        text-transform: capitalize;
+        background: rgba(#64449b,.1);
+        border: 2px solid rgba(255,255,255,.3);
+        text-decoration: none;
+        
+        outline: none;
+        transition: background .2s ease-in, border .2s ease-in;
+        
+        i {
+            margin-right: 20px;
+        }
+        
+        &:hover {
+            border: 2px solid rgba(255,255,255,.8);
+            background: rgba(#64449b,.4);
+        }
+    }
+}

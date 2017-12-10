@@ -1,9 +1,9 @@
 .toolbar {
     position: absolute;
-    padding: 10px;
     text-align: right;
 
     &.toolbar-top {
+        padding: 10px;
         top: 0px;
         right: 0px;
     }
@@ -11,6 +11,22 @@
     &.toolbar-bottom {
         bottom: 0px;
         left: 0px;
+        right: 0px;
+        
+        .toolbar-left,
+        .toolbar-right {
+            padding: 10px;
+            position: absolute;
+            bottom: 0px;
+        }
+        
+        .toolbar-left {
+            left: 0px;
+        }
+        
+        .toolbar-right {
+            right: 0px;
+        }
     }
 
     ul {
@@ -46,4 +62,79 @@
             }
         }
     }
+    
+    .profile {
+        position: relative;
+        background: transparent;
+        border: none;
+        outline: none;
+        height: 50px;
+        
+        .username {
+            position: absolute;
+            right: 70px;
+            bottom: 18px;
+            color: rgba(white, .5);
+            font-size: 15px;
+            line-height: 15px;
+            text-align: right;
+            transition: color .2s ease-in;
+        }
+        
+        .avatar {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(white, .5);
+            transition: border .2s ease-in;
+        }
+        
+        &:hover {
+            .username {
+                color: rgba(white, .8);
+            }
+            
+            .avatar {
+                border: 2px solid rgba(white, .8);
+            }
+        }
+    }
+}
+
+.profile-menu-content {
+    padding: 0px;
+    background-color: transparent;
+    border: 2px solid white;
+
+    md-menu-item {
+        height: 30px;
+        min-height: 30px;
+        min-width: 200px;
+        
+        button {
+            color: white;
+            background: rgba(white, .1);
+            border: none;
+            outline: none;
+            border-bottom: 2px solid white;
+            text-align: left;
+            padding: 0 10px;
+            transition: background .2s ease-in;
+            
+            &:hover {
+                background: rgba(white, .4);
+            }
+        }
+
+        &:last-child {
+            button {
+                border-bottom: none;
+            }
+        }
+
+
+    }                
 }
