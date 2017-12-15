@@ -1,12 +1,12 @@
 angular.module('app.services')
-.service('LoginService', ['$state', 'User', 'LoopBackAuth', function ($state, User, LoopBackAuth) {
+.service('LoginService', ['$state', '$cookieStore', 'User', 'LoopBackAuth', function ($state, $cookies, User, LoopBackAuth) {
     const ipcRenderer = require('electron').ipcRenderer;
     
     // open login window
     function loginWnd() {
         ipcRenderer.send('oauth-login');
     }
-    
+
     // login
     function login(event, authInfo) {
         if (!authInfo || !authInfo.accessToken || !authInfo.userId) {
@@ -20,15 +20,13 @@ angular.module('app.services')
         User.getCurrent()
         .$promise
         .then(function (user) {
-            // TODO: handle user data
             $state.go('app.games.home');
         })
-        .catch(function () {
-            // clear invalid user data
+        .catch(function (err) {
             clearUserLoopBack();
         });
     }
-
+    
     // clear user from loopback auth
     function clearUserLoopBack() {
         LoopBackAuth.clearUser();

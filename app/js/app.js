@@ -81,7 +81,7 @@ var app = angular.module('app', [
                     controller: 'LoginCtrl'
                 }
             },
-            onEnter: ['$state', 'User', function ($state, User) {
+            onEnter: ['$state', 'User', 'currentUser', function ($state, User, currentUser) {
                 if (User.isAuthenticated()) {
                     $state.go('app.games.home');
                 }
@@ -107,6 +107,48 @@ var app = angular.module('app', [
             views: {
                 games: {
                     templateUrl: 'games.home.html'
+                }
+            }
+        })
+        .state('app.games.lobbies', {
+            abstract: true,
+            url: '/lobby',
+            views: {
+                games: {
+                    templateUrl: 'lobby/lobbies.index.html'
+                }
+            }
+        })
+        .state('app.games.lobbies.create', {
+            url: '',
+            views: {
+                lobby: {
+                    templateUrl: 'lobby/lobbies.create.html',
+                    controller: 'LobbyCreateCtrl'
+                }
+            }
+        })
+        .state('app.games.lobbies.join', {
+            url: '/join',
+            views: {
+                lobby: {
+                    templateUrl: 'lobby/lobbies.join.html'
+                }
+            }
+        })
+        .state('app.games.lobbies.find', {
+            url: '/find',
+            views: {
+                lobby: {
+                    templateUrl: 'lobby/lobbies.find.html'
+                }
+            }
+        })
+        .state('app.games.lobbies.lobby', {
+            url: '/:lobbyID',
+            views: {
+                lobby: {
+                    templateUrl: 'lobby/lobbies.lobby.html'
                 }
             }
         });

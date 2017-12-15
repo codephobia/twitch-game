@@ -1,0 +1,25 @@
+<div class="lobby-create" layout="column" layout-fill>
+    <div class="game-title-bar">
+        <div class="app-back">
+            <button class="btn-app-back" ui-sref="app.games.home">
+                <i class="fa fa-chevron-left"></i>
+            </button>
+        </div>
+        <h1 class="game-title">Game Title</h1>
+    </div>
+    <div class="section-title">
+        <h2>Create Game</h2>
+    </div>
+    <div class="game-type" layout="row">
+        <button class="game" ng-class="{ 'active': selectedGame === game }" ng-repeat="game in games track by $index" ng-click="setGame(game)">{{game}}</button>
+    </div>
+    <div class="lobby-name">
+        <md-input-container class="md-block">
+            <label for="lobbyName">Lobby Name</label>
+            <input type="text" id="lobbyName" name="lobbyName" value="">
+        </md-input-container>
+    </div>
+    <div class="lobby-submit">
+        <button type="submit" class="btn">Make Lobby</button>
+    </div>
+</div>

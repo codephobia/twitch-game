@@ -1,0 +1,115 @@
+.lobbies {
+    
+    .lobby-create {
+        
+        .game-title-bar {
+            position: relative;
+            
+            .app-back {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                padding: 10px;
+                
+                .btn-app-back {
+                    color: rgba(255,255,255,.3);
+                    transition: color .2s ease-in;
+                    font-size: 30px;
+                    background-color: transparent;
+
+                    &:hover {
+                        color: rgba(255,255,255,.8);
+                    }
+                }/* btn-app-back */
+            }/* app-back */
+            
+            .game-title {
+                text-align: center;
+                font-size: 25px;
+                color: white;
+                padding: 10px 0px;
+                text-transform: uppercase;
+            }
+        }/* game-title-bar */
+        
+        .section-title {
+            margin: 20px 20px 0px 20px;
+            font-size: 15px;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        .game-type {
+            margin: 20px 20px 0px 20px;
+            
+            .game {
+                margin: 0px 20px 20px 0px;
+                display: inline-block;
+                width: 176px;
+                height: 112px;
+                background: rgba(0,0,0,.2);
+                border: 2px solid rgba(255,255,255,.3);
+                box-shadow: 0px 0px 5px rgba(0,0,0,.4);
+                
+                text-align: center;
+                line-height: 112px;
+                font-size: 40px;
+                color: rgba(255,255,255,.3);
+                
+                transition: border .2s ease-in, color .2s ease-in;
+                cursor: pointer;
+                
+                &:nth-child(4n) {
+                    margin-right: 0px;
+                }
+                
+                &.active {
+                    border: 2px solid rgba(255,255,255,.8);
+                    color: rgba(255,255,255,.8);
+                }
+            }/* game */
+        }/* game-type */
+        
+        .lobby-name {
+            margin: 0px 20px 20px 20px;
+            
+            label {
+                padding-left: 14px;
+                color: rgba(255,255,255,.3);
+                font-size: 20px;
+                transform: translate3d(0, 42px, 0);
+                transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+            
+            .md-input-focused {
+                label {
+                    transform: translate3d(0, 0px, 0);
+                    color: rgba(255,255,255,.8);
+                    font-size: 10px;
+                    padding-left: 7px;
+                }
+            }
+            
+            input {
+                display: block;
+                border: 2px solid rgba(255,255,255,.3);
+                background: rgba(255,255,255,.1);
+                padding: 12px 12px;
+                color: white;
+                font-size: 20px;
+                height: auto;
+                
+                transition: border .2s ease-in;
+                
+                &:hover,
+                &:focus {
+                    border: 2px solid rgba(255,255,255,.8);
+                }
+            }
+        }
+        
+        .lobby-submit {
+            text-align: center;
+        }
+    }/* lobby-create */
+}/* lobbies */

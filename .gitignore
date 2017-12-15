@@ -5,3 +5,5 @@ app/build
 web/node_modules
 web/vendor
 web/build
+
+server/server.exe

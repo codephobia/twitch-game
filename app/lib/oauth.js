@@ -68,9 +68,9 @@ function oauthLogin(e, data) {
                     }
                     
                     // remove the cookie
-                    authWindow.webContents.session.cookies.remove(callbackUrl, cookieName, function () {
+                    //authWindow.webContents.session.cookies.remove(callbackUrl, cookieName, function () {
                         return waterfallCb(null, userId);
-                    });
+                    //});
                 });
             },
             function (userId, waterfallCb) {
@@ -93,9 +93,9 @@ function oauthLogin(e, data) {
                     }
                     
                     // remove the cookie
-                    authWindow.webContents.session.cookies.remove(callbackUrl, cookieName, function () {
+                    //authWindow.webContents.session.cookies.remove(callbackUrl, cookieName, function () {
                         return waterfallCb(null, userId, accessToken);
-                    });
+                    //});
                 });
             }
         ], function (err, userId, accessToken) {
