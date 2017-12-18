@@ -1,7 +1,28 @@
-.m-b-xs {
-    margin-bottom: 5px;
+$space: (
+    xs: 5px,
+    sm: 10px,
+    md: 15px,
+    lg: 20px,
+    xl: 30px,
+);
+
+@mixin marginSet($size) {
+    .m-t-#{$size} {
+        margin-top: map-get($space, $size);
+    }
+    .m-r-#{$size} {
+        margin-right: map-get($space, $size);
+    }
+    .m-b-#{$size} {
+        margin-bottom: map-get($space, $size);
+    }
+    .m-l-#{$size} {
+        margin-left: map-get($space, $size);
+    }
 }
 
-.m-b-sm {
-    margin-bottom: 10px;
-}
+@include marginSet(xs);
+@include marginSet(sm);
+@include marginSet(md);
+@include marginSet(lg);
+@include marginSet(xl);

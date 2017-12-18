@@ -1,2 +1,51 @@
-<div class="lobby">
+<div class="lobby" layout="column" layout-fill>
+    <div class="game-title-bar">
+        <div class="app-back">
+            <button class="btn-app-back" ui-sref="app.games.home">
+                <i class="fa fa-chevron-left"></i>
+            </button>
+        </div>
+        <h1 class="game-title">Game Title</h1>
+    </div>
+    <div class="game-name">
+        Game Name
+    </div>
+    <div class="game-code">
+        CODE
+    </div>
+    <div class="player-slots-wrapper" layout="row" layout-align="center start">
+        <ul class="player-slots" layout="row" layout-align="stretch start" flex>
+            <li class="player-slot" ng-repeat="slot in slots track by $index" layout="column" layout-align="center center" flex ng-class="{ 'slot-filled': players[$index] }">
+                <div class="player-leader" ng-class="{ 'is-leader': players[$index].isLeader }"></div>
+                
+                <md-menu mousepoint-menu>
+                    <div class="player-wrapper" ng-click="" app-context-menu="!!players[$index] && $mdOpenMousepointMenu($event)">
+                        <div class="player-avatar-wrapper">
+                            <div class="locked" ng-if="locked && !players[$index]">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                            <div class="player-avatar"></div>
+                        </div>
+                        <div class="player-username">
+                            {{players[$index].username || 'empty'}}
+                        </div>
+                    </div>
+                    <md-menu-content class="profile-menu-content">
+                        <md-menu-item>
+                            <button>Kick</button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                
+            </li>
+        </ul>
+    </div>
+    <div class="lobby-settings">
+        <button class="btn-clear" ng-click="locked = !locked">
+            <i class="fa m-r-sm" ng-class="{ 'fa-lock': locked, 'fa-unlock-alt': !locked }"></i>Lobby <span ng-if="locked">Locked</span><span ng-if="!locked">Unlocked</span>
+        </button>
+    </div>
+    <div class="lobby-submit">
+        <button class="btn">Start Game</button>
+    </div>
 </div>

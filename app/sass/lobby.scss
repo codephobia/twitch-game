@@ -1,36 +1,36 @@
 .lobbies {
     
-    .lobby-create {
-        
-        .game-title-bar {
-            position: relative;
-            
-            .app-back {
-                position: absolute;
-                top: 0px;
-                left: 0px;
-                padding: 10px;
-                
-                .btn-app-back {
-                    color: rgba(255,255,255,.3);
-                    transition: color .2s ease-in;
-                    font-size: 30px;
-                    background-color: transparent;
+    .game-title-bar {
+        position: relative;
 
-                    &:hover {
-                        color: rgba(255,255,255,.8);
-                    }
-                }/* btn-app-back */
-            }/* app-back */
-            
-            .game-title {
-                text-align: center;
-                font-size: 25px;
-                color: white;
-                padding: 10px 0px;
-                text-transform: uppercase;
-            }
-        }/* game-title-bar */
+        .app-back {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            padding: 10px;
+
+            .btn-app-back {
+                color: rgba(255,255,255,.3);
+                transition: color .2s ease-in;
+                font-size: 30px;
+                background-color: transparent;
+
+                &:hover {
+                    color: rgba(255,255,255,.8);
+                }
+            }/* btn-app-back */
+        }/* app-back */
+
+        .game-title {
+            text-align: center;
+            font-size: 25px;
+            color: white;
+            padding: 10px 0px;
+            text-transform: uppercase;
+        }
+    }/* game-title-bar */
+    
+    .lobby-create {
         
         .section-title {
             margin: 20px 20px 0px 20px;
@@ -112,4 +112,105 @@
             text-align: center;
         }
     }/* lobby-create */
+    
+    .lobby {
+        
+        .game-name {
+            margin: 50px 20px 20px;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .game-code {
+            margin: 20px;
+            color: white;
+            font-size: 40px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .player-slots-wrapper {
+            margin: 20px 20px 50px;
+            
+            .player-slots {
+                margin: 0px;
+                text-align: center;
+                
+                .player-slot {
+                    margin-right: 20px;
+                    list-style: none;
+                    opacity: 0.3;
+                    
+                    &.slot-filled {
+                        opacity: 1;
+                    }
+                    
+                    &:nth-child(8n) {
+                        margin-right: 0px;
+                    }
+                    
+                    .player-leader {
+                        margin: 0px 0px 10px;
+                        width: 100%;
+                        height: 15px;
+                        
+                        &.is-leader {
+                            background: url(../img/leader.png) no-repeat center center;
+                        }
+                    }
+                    
+                    .player-wrapper {
+                        outline: none;
+                        
+                        .player-avatar-wrapper {
+                            position: relative;
+                            text-align: center;
+
+                            .player-avatar {
+                                display: inline-block;
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 50%;
+                                border: 2px solid white;
+                            }
+
+                            .locked {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                margin-top: -13px;
+                                margin-left: -10px;
+                                width: 20px;
+                                height: 20px;
+                                font-size: 20px;
+                                line-height: 20px;
+                                text-align: center;
+                                color: white;
+                            }
+                        }
+
+                        .player-username {
+                            margin: 10px 0px 0px;
+                            color: white;
+                            font-size: 10px;
+                            text-align: center;
+                            text-transform: uppercase;
+                        }
+                    }
+                }
+            }
+        }
+        
+        .lobby-settings {
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .lobby-submit {
+            text-align: center;
+        }
+        
+    }
 }/* lobbies */

@@ -148,7 +148,8 @@ var app = angular.module('app', [
             url: '/:lobbyID',
             views: {
                 lobby: {
-                    templateUrl: 'lobby/lobbies.lobby.html'
+                    templateUrl: 'lobby/lobbies.lobby.html',
+                    controller: 'LobbyCtrl'
                 }
             }
         });
