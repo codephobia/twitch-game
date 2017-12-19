@@ -9,5 +9,33 @@
             "reconnectInterval": 1000
         },
         "allowExtendedOperators": true
+    },
+    "lobby-server": {
+        "baseUrl": "http://localhost:8080",
+        "debug": false,
+        "name": "lobby-server",
+        "connector": "loopback-connector-rest",
+        "operations": [
+            {
+                "template": {
+                    "method": "POST",
+                    "url": "/lobby",
+                    "headers": {
+                        "accepts": "application/json",
+                        "content-type": "application/json"
+                    },
+                    "body": {
+                        "lobby_id": "{lobbyId}",
+                        "user_id": "{userId}"
+                    }
+                },
+                "functions": {
+                    "createLobby": [
+                        "lobbyId",
+                        "userId"
+                    ]
+                }
+            }
+        ]
     }
 }

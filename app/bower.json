@@ -24,6 +24,6 @@
     "font-awesome": "fontawesome#^4.7.0",
     "angular-resource": "^1.6.7",
     "angular-cookies": "^1.6.7",
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
   }
 }

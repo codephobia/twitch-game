@@ -11,15 +11,15 @@
         <h2>Create Game</h2>
     </div>
     <div class="game-type" layout="row">
-        <button class="game" ng-class="{ 'active': selectedGame === game }" ng-repeat="game in games track by $index" ng-click="setGame(game)">{{game}}</button>
+        <button class="game" ng-class="{ 'active': selectedGame === game }" ng-repeat="game in games track by $index" ng-click="setGame(game)">{{game.name}}</button>
     </div>
     <div class="lobby-name">
         <md-input-container class="md-block">
             <label for="lobbyName">Lobby Name</label>
-            <input type="text" id="lobbyName" name="lobbyName" value="">
+            <input type="text" id="lobbyName" name="lobbyName" value="" ng-model="lobbyName">
         </md-input-container>
     </div>
     <div class="lobby-submit">
-        <button class="btn" ui-sref="app.games.lobbies.lobby({ lobbyID: 'test' })">Make Lobby</button>
+        <button class="btn" ng-click="createLobby()">Make Lobby</button>
     </div>
 </div>

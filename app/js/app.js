@@ -126,6 +126,11 @@ var app = angular.module('app', [
                     templateUrl: 'lobby/lobbies.create.html',
                     controller: 'LobbyCreateCtrl'
                 }
+            },
+            resolve: {
+                games: ['Game', function (Game) {
+                    return Game.find({}).$promise;
+                }]
             }
         })
         .state('app.games.lobbies.join', {
@@ -145,7 +150,7 @@ var app = angular.module('app', [
             }
         })
         .state('app.games.lobbies.lobby', {
-            url: '/:lobbyID',
+            url: '/:lobbyId',
             views: {
                 lobby: {
                     templateUrl: 'lobby/lobbies.lobby.html',

@@ -1,0 +1,31 @@
+{
+	"name": "lobbyServer",
+	"plural": "lobbyServers",
+	"base": "PersistedModel",
+	"strict": true,
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"lobbyId": {
+            "type": "string"
+        },
+		"userId": {
+            "type": "string"
+        }
+	},
+	"relations": {
+	},
+	"acls": [
+        {
+            "accessType": "*",
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "DENY"
+        }
+	],
+	"validations": [],
+	"mixins": {},
+	"methods": []
+}

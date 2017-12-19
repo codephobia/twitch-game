@@ -1,0 +1,40 @@
+{
+	"name": "game",
+	"plural": "games",
+	"base": "PersistedModel",
+	"strict": true,
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"name": {
+            "type": "string"
+        }
+	},
+	"relations": {
+		"lobby": {
+            "type": "hasMany",
+            "model": "lobby",
+            "foreignKey": "lobbyId"
+        }
+	},
+	"acls": [
+        {
+            "accessType": "*",
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "DENY"
+        },
+        {
+            "accessType": "READ",
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW"
+        }
+	],
+	"validations": [],
+	"mixins": {
+	},
+	"methods": []
+}

@@ -8,9 +8,9 @@ import (
 )
 
 const (
-    writeWait = 10 * time.Second
+    writeWait = 1 * time.Second
     pongWait = 60 * time.Second
-    pingPeriod = (pongWait / 9) * 10
+    pingPeriod = 10 * time.Second
     maxMessageSize = 512
 )
 
@@ -66,6 +66,12 @@ func (p *Player) WritePump() {
     
     for {
         select {
+        case <-ticker.C:
+            p.conn.SetWriteDeadline(time.Now().Add(writeWait))
+            if err := p.conn.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
+                log.Printf("[ERROR] sending ping: %s", err)
+                return
+            }
         case message, ok := <-p.Send:
             p.conn.SetWriteDeadline(time.Now().Add(writeWait))
             if !ok {
@@ -85,11 +91,6 @@ func (p *Player) WritePump() {
             }
             
             if err := w.Close(); err != nil {
-                return
-            }
-        case <-ticker.C:
-            p.conn.SetWriteDeadline(time.Now().Add(writeWait))
-            if err := p.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
                 return
             }
         }

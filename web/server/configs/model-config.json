@@ -42,5 +42,17 @@
   "Role": {
     "dataSource": "mongodb",
     "public": false
+  },
+  "lobby": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "game": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "lobbyServer": {
+    "dataSource": "lobby-server",
+    "public": false
   }
 }
