@@ -5,6 +5,8 @@ import (
     "time"
     
     "github.com/gorilla/websocket"
+    
+    database "github.com/codephobia/twitch-game/server/database"
 )
 
 const (
@@ -15,6 +17,8 @@ const (
 )
 
 type Player struct {
+    database *database.Database
+    
     ID       string
     Username string
     
@@ -23,13 +27,24 @@ type Player struct {
     Send     chan []byte
 }
 
-func NewPlayer(userID string, l *Lobby, c *websocket.Conn) *Player {
+func NewPlayer(db *database.Database, userID string, l *Lobby, c *websocket.Conn) (*Player, error) {
+    
+    user, err := db.GetUserById(userID)
+    if err != nil {
+        log.Printf("[ERROR] get user by id: %s", err)
+        return nil, err
+    }
+    
     return &Player{
+        database: db,
+        
         ID:    userID,
+        Username: user.Username,
+        
         Lobby: l,
         conn:  c,
         Send:  make(chan []byte, 256),
-    }
+    }, nil
 }
 
 func (p *Player) ReadPump() {

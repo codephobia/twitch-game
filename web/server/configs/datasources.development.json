@@ -26,13 +26,21 @@
                     },
                     "body": {
                         "lobby_id": "{lobbyId}",
-                        "user_id": "{userId}"
+                        "lobby_name": "{lobbyName}",
+                        "user_id": "{userId}",
+                        "game_id": "{gameId}",
+                        "game_name": "{gameName}",
+                        "game_slots": "{gameSlots}"
                     }
                 },
                 "functions": {
                     "createLobby": [
                         "lobbyId",
-                        "userId"
+                        "lobbyName",
+                        "userId",
+                        "gameId",
+                        "gameName",
+                        "gameSlots"
                     ]
                 }
             }

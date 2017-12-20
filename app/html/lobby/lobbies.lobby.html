@@ -8,7 +8,7 @@
         <h1 class="game-title">Game Title</h1>
     </div>
     <div class="game-name">
-        Game Name
+        {{lobby.getGame().name}}
     </div>
     <div class="game-code">
         CODE
@@ -27,7 +27,8 @@
                             <div class="player-avatar"></div>
                         </div>
                         <div class="player-username">
-                            {{lobby.getPlayer($index).username || 'empty'}}
+                            <span ng-if="lobby.getPlayer($index).username">{{lobby.getPlayer($index).username | username}}</span>
+                            <span ng-if="!lobby.getPlayer($index).username">empty</span>
                         </div>
                     </div>
                     <md-menu-content class="player-context-menu">

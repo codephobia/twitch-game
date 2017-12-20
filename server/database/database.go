@@ -10,15 +10,17 @@ import (
 )
 
 var (
-    COLLECTION_LOBBIES string = "lobbies"
+    COLLECTION_LOBBIES string = "lobby"
+    COLLECTION_USERS   string = "user"
 )
 
 type Database struct {
     config *config.Config
     
-    session   *mgo.Session
-    database  *mgo.Database
-    lobbies *mgo.Collection
+    session  *mgo.Session
+    database *mgo.Database
+    lobbies  *mgo.Collection
+    users    *mgo.Collection
 }
 
 // create new database
@@ -54,9 +56,17 @@ func (db *Database) initDatabase() {
     
     // init lobbies
     db.initLobbies()
+    
+    // init users
+    db.initUsers()
 }
 
-// init followers collection
+// init lobbies collection
 func (db *Database) initLobbies() {
     db.lobbies = db.database.C(COLLECTION_LOBBIES)
+}
+
+// init users collection
+func (db *Database) initUsers() {
+    db.users = db.database.C(COLLECTION_USERS)
 }

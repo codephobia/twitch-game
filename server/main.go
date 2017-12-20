@@ -39,7 +39,7 @@ func NewMain() (*Main, error) {
     }
     
     // init nexus
-    nexus := nexus.NewNexus()
+    nexus := nexus.NewNexus(db)
     
     // api
     api := api.NewApi(c, db, nexus)

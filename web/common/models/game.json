@@ -10,6 +10,9 @@
 	"properties": {
 		"name": {
             "type": "string"
+        },
+        "slots": {
+            "type": "number"
         }
 	},
 	"relations": {

@@ -22,8 +22,13 @@ func (api *Api) handleLobby() http.Handler {
 }
 
 type LobbyCreateRequest struct {
-    LobbyID string `json:"lobby_id"`
-    UserID  string `json:"user_id"`
+    LobbyID   string `json:"lobby_id"`
+    LobbyName string `json:"lobby_name"`
+    UserID    string `json:"user_id"`
+    
+    GameID    string `json:"game_id"`
+    GameName  string `json:"game_name"`
+    GameSlots int    `json:"game_slots"`
 }
 
 // handleLobbyPost
@@ -39,7 +44,14 @@ func (api *Api) handleLobbyPost(w http.ResponseWriter, r *http.Request) {
     
     log.Printf("[INFO] creating lobby [%s] for user id [%s]", createRequest.LobbyID, createRequest.UserID)
     
-    api.nexus.InitNewLobby(createRequest.LobbyID, createRequest.UserID)
+    api.nexus.InitNewLobby(
+        createRequest.LobbyID,
+        createRequest.LobbyName,
+        createRequest.UserID,
+        createRequest.GameID,
+        createRequest.GameName,
+        createRequest.GameSlots,
+    )
 }
 
 // handleLobbyJoin
@@ -80,7 +92,14 @@ func (api *Api) handleLobbyJoinGet(w http.ResponseWriter, r *http.Request) {
     }
     
     // add player to lobby
-    p := nexus.NewPlayer(userID, lobby, conn)
+    p, err := nexus.NewPlayer(api.database, userID, lobby, conn)
+    if err != nil {
+        log.Printf("[ERROR] lobby join: %s", err)
+        api.handleError(w, 404, err)
+        return
+    }
+
+    // register player on lobby
     p.Lobby.Register <- p
     
     // init read / write for socket connection

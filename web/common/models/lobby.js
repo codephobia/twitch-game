@@ -4,26 +4,40 @@ var ObjectID = require('mongodb').ObjectID;
 module.exports = function (Lobby) {
     
     // create lobby and add to lobby server
-    Lobby.createLobby = function (req, gameId, name, cb) {
+    Lobby.createLobby = function (req, gameId, lobbyName, cb) {
         var userId = req.accessToken.userId.toString();
         
         async.waterfall([
+            // get game data
             function (waterfallCb) {
+                var Game = Lobby.app.models.Game;
+                
+                Game.findOne({ where: { id: ObjectID(gameId) } }, function (err, data) {
+                    if (err) {
+                        return waterfallCb(err);
+                    }
+                    
+                    return waterfallCb(null, data.name, data.slots);
+                });
+            },
+            // create lobby on database
+            function (gameName, gameSlots, waterfallCb) {
                 Lobby.create({
                     gameId: ObjectID(gameId),
-                    name: name
+                    name: lobbyName
                 }, function (err, data) {
                     if (err) {
                         return waterfallCb(err);
                     }
                     
-                    return waterfallCb(null, data.id.toString());
+                    return waterfallCb(null, gameName, gameSlots, data.id.toString());
                 });
             },
-            function (lobbyId, waterfallCb) {
+            // create lobby on server
+            function (gameName, gameSlots, lobbyId, waterfallCb) {
                 var LobbyServer = Lobby.app.models.LobbyServer;
                 
-                LobbyServer.createLobby(lobbyId, userId, function (err, data) {
+                LobbyServer.createLobby(lobbyId, lobbyName, userId, gameId, gameName, gameSlots, function (err, data) {
                     if (err) {
                         return waterfallCb(err);
                     }
@@ -36,6 +50,7 @@ module.exports = function (Lobby) {
                 return cb(err);
             }
             
+            // return lobby id
             return cb(null, lobbyId);
         });
     };
@@ -46,7 +61,7 @@ module.exports = function (Lobby) {
         accepts: [
             { arg: 'req', type: 'object', http: { source: 'req' } },
             { arg: 'gameId', type: 'string', http: { source: 'form' }, required: true },
-            { arg: 'name', type: 'string', http: { source: 'form' }, required: true }
+            { arg: 'lobbyName', type: 'string', http: { source: 'form' }, required: true }
         ],
         http: { verb: 'post', path: '/createLobby' },
         returns: { arg: 'lobbyId', type: 'string' }

@@ -1,33 +1,49 @@
 angular.module('app.services')
-.service('LobbyService', ['$interval', 'LoopBackAuth', 
-    function ($interval, LoopBackAuth) {
+.service('LobbyService', ['$interval', '$timeout', 'LoopBackAuth', 'SocketService', 
+    function ($interval, $timeout, LoopBackAuth, SocketService) {
+        var game = null;
         var slots = [];
         var players = [];
         var locked = false;
-        var socket;
+        var conn;
 
         // init lobby
-        function init(lobbyId, s, p) {
+        function init(lobbyId) {
             var currentUserId = LoopBackAuth.currentUserData.id;
+            var url = 'ws://localhost:8080/lobby/join?lobby_id=' + lobbyId + '&user_id=' + currentUserId;
             
-            socket = new WebSocket('ws://localhost:8080/lobby/join?lobby_id=' + lobbyId + '&user_id=' + currentUserId);
-            socketInit();
-
-            slots = s;
-            players = p;
+            conn = SocketService.new(
+                url,
+                function () {
+                    console.log('connected');
+                },
+                function () {
+                    console.log('disconnected');
+                }
+            );
             
+            // init the connection bindings
+            connectionInit();
         }
 
-        function socketInit() {
-            socket.onmessage = function (message) {
-                console.log('socket message: ', message.data);
-            };
-            socket.onclose = function (event) {
-                console.log('socket closed');
-            };
+        // init lobby connection binds
+        function connectionInit() {
+            conn.bind('LOBBY_INIT', function (data) {
+                $timeout(function () {
+                    game = data.game;
+                    slots = new Array(game.slots);
+                    players = data.players;
+                    locked = data.locked;
+                });
+            });
         }
         
-        // get lobby slots
+        // get lobby game info
+        function getGame() {
+            return game;
+        }
+        
+        // get lobby game info
         function getSlots() {
             return slots;
         }
@@ -102,6 +118,7 @@ angular.module('app.services')
         // return available methods
         return {
             init: init,
+            getGame: getGame,
             getSlots: getSlots,
             getCurrentPlayer: getCurrentPlayer,
             getPlayer: getPlayer,

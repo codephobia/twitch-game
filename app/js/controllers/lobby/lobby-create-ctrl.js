@@ -15,7 +15,7 @@ angular.module('app.controllers')
     function createLobby() {
         Lobby.createLobby({
             gameId: $scope.selectedGame.id,
-            name: $scope.lobbyName
+            lobbyName: $scope.lobbyName
         }).$promise.then(function (data) {
             // go to lobby
             $state.go('app.games.lobbies.lobby', { lobbyId: data.lobbyId });
