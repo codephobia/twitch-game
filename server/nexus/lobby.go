@@ -1,7 +1,6 @@
 package nexus
 
 import (
-    "encoding/json"
     "log"
     
     database "github.com/codephobia/twitch-game/server/database"
@@ -29,6 +28,7 @@ type Game struct {
     Slots int    `json:"slots"`
 }
 
+// create new lobby
 func NewLobby(db *database.Database, lobbyID string, lobbyName string, userID string, gameID string, gameName string, gameSlots int) *Lobby {
     // create game
     game := &Game{
@@ -55,70 +55,90 @@ func NewLobby(db *database.Database, lobbyID string, lobbyName string, userID st
     }
 }
 
+// run the lobby
 func (l *Lobby) Run() {
     for {
         select {
+            // register player with lobby
             case player := <-l.Register:
-                l.Players[player] = true
-                
-                event, err := l.Event()
-                if err != nil {
-                    log.Printf("[ERROR] %s", err);
-                    return
-                }
-                player.Send <- event
+                l.RegisterPlayer(player)
+            
+            // unregister player with lobby
             case player := <-l.Unregister:
-                if _, ok := l.Players[player]; ok {
-                    close(player.Send)
-                    delete(l.Players, player)
-                }
+                l.UnregisterPlayer(player)
+            
+            // broadcast event to lobby
             case message := <-l.Broadcast:
-                for player := range l.Players {
-                    select {
-                        case player.Send <- message:
-                        default:
-                            close(player.Send)
-                            delete(l.Players, player)
-                    }
-                }
+                l.SendPlayers(message)
         }
     }
 }
 
-type LobbyInitData struct {
-    LobbyName string       `json:"lobbyName"`
-    Players  []LobbyPlayer `json:"players"`
-    Locked   bool          `json:"locked"`
-    Game     *Game         `json:"game"`
-}
+// register a player with the lobby
+func (l *Lobby) RegisterPlayer(player *Player) {
+    l.Players[player] = true
 
-type LobbyPlayer struct {
-    Username string `json:"username"`
-    IsLeader bool   `json:"isLeader"`
-    UserID   string `json:"userId"`
-}
-
-func (l *Lobby) Event() ([]byte, error) {
-    players := make([]LobbyPlayer, 0)
-    
-    for player, _ := range l.Players {
-        players = append(players, LobbyPlayer{
-            Username: player.Username,
-            IsLeader: l.LeaderID == player.ID,
-            UserID: player.ID,
-        })
-    }
-    
-    data := []interface{}{"LOBBY_INIT", &LobbyInitData{
-        Players: players,
-        Game: l.Game,
-        Locked: l.Locked,
-    }}
-    
-    event, err := json.Marshal(data);
+    // send new player lobby state
+    initEvent, err := l.NewLobbyInitEvent()
     if err != nil {
-        return nil, err
+        // close player connection
+        close(player.Send)
+        delete(l.Players, player)
+
+        // log error
+        log.Printf("[ERROR] init lobby event: ", err)
+        return
+    }
+
+    // send event to player
+    player.Send <- initEvent
+    
+    
+    // create join event for existing players
+    joinEvent, err := l.NewLobbyJoinEvent(player)
+    if err != nil {
+        // log error
+        log.Printf("[ERROR] join lobby event: ", err)
+        return
     }
     
-    return event, nil
+    // send join event to existing players in lobby
+    l.SendPlayersExcept(player, joinEvent)
+}
+
+// unregister a player with lobby
+func (l *Lobby) UnregisterPlayer(player *Player) {
+    if _, ok := l.Players[player]; ok {
+        close(player.Send)
+        delete(l.Players, player)
+    }    
+}
+
+// send all players an event
+func (l *Lobby) SendPlayers(message []byte) {
+    for player := range l.Players {
+        select {
+            case player.Send <- message:
+            default:
+                close(player.Send)
+                delete(l.Players, player)
+        }
+    }
+}
+
+// send all players except a player an event
+func (l *Lobby) SendPlayersExcept(p *Player, message []byte) {
+    for player := range l.Players {
+        // skip excepted player
+        if player == p {
+            break
+        }
+        // send message to players
+        select {
+            case player.Send <- message:
+            default:
+                close(player.Send)
+                delete(l.Players, player)
+        }
+    }
 }

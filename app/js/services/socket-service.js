@@ -80,6 +80,8 @@ angular.module('app.services')
     SocketHandler.prototype.send = function (event, data) {
         var self = this;
 
+        data = data || {};
+        
         // validate event
         if (!event || typeof event !== 'string' || !event.length) {
             console.error("[ERROR] send: invalid event name: ", event);
@@ -87,7 +89,7 @@ angular.module('app.services')
         }
 
         // validate data
-        if (!data || typeof event !== 'object') {
+        if (!data || typeof data !== 'object') {
             console.error("[ERROR] send: invalid data: ", event);
             return;
         }

@@ -66,9 +66,25 @@ func (p *Player) ReadPump() {
             break
         }
         
-        // TODO: validate message from player
+        // validates event and returns event
+        event, err := p.Lobby.ValidateEvent(p, message)
+        if err != nil {
+            log.Printf("[ERROR] read event: %s", err)
+            break
+        }
         
-        p.Lobby.Broadcast <- message
+        // execute the event
+        event.Execute()
+        
+        // generate message to broadcast
+        eventMessage, err := event.Event().Generate()
+        if err != nil {
+            log.Printf("[ERROR] read event: %s", err)
+            break
+        }
+        
+        // broadcast message
+        p.Lobby.Broadcast <- eventMessage
     }
 }
 

@@ -137,7 +137,8 @@ var app = angular.module('app', [
             url: '/join',
             views: {
                 lobby: {
-                    templateUrl: 'lobby/lobbies.join.html'
+                    templateUrl: 'lobby/lobbies.join.html',
+                    controller: 'LobbyJoinCtrl'
                 }
             }
         })

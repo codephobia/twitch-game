@@ -36,6 +36,18 @@ angular.module('app.services')
                     locked = data.locked;
                 });
             });
+            
+            conn.bind('LOBBY_LOCK', function (data) {
+                $timeout(function () {
+                    locked = data.locked;
+                });
+            })
+            
+            conn.bind('LOBBY_JOIN', function (data) {
+                $timeout(function () {
+                    players.push(data.player);
+                });
+            });
         }
         
         // get lobby game info
@@ -107,7 +119,9 @@ angular.module('app.services')
         
         // toggle if lobby is locked
         function toggleLocked() {
-            locked = !locked;
+            conn.send('LOBBY_LOCK', {
+                locked: !locked
+            });
         }
         
         // return if lobby is locked
