@@ -1,0 +1,45 @@
+@import 'colors';
+
+.app-input {
+    label {
+        padding-left: 14px;
+        color: rgba(255,255,255,.3);
+        font-size: 20px;
+        transform: translate3d(0, 42px, 0);
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .md-input-focused,
+    .md-input-has-value {
+        label {
+            transform: translate3d(0, 0px, 0);
+            color: rgba(255,255,255,.8);
+            font-size: 10px;
+            padding-left: 7px;
+        }
+    }
+
+    input {
+        display: block;
+        border: 2px solid rgba(255,255,255,.3);
+        background: rgba(255,255,255,.1);
+        padding: 12px 12px;
+        color: white;
+        font-size: 20px;
+        height: auto;
+
+        transition: border .2s ease-in;
+
+        &:hover,
+        &:focus {
+            border: 2px solid rgba(255,255,255,.8);
+        }
+        
+        &:disabled {
+            &:hover,
+            &:focus {
+                border: 2px solid rgba(255,255,255,.3) !important;
+            }
+        }
+    }
+}

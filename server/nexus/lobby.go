@@ -1,6 +1,7 @@
 package nexus
 
 import (
+    "fmt"
     "log"
     
     database "github.com/codephobia/twitch-game/server/database"
@@ -8,9 +9,12 @@ import (
 
 type Lobby struct {
     database *database.Database
+    nexus    *Nexus
     
     ID       string
     Name     string
+    Code     string
+    
     Game     *Game
     LeaderID string
     
@@ -29,7 +33,7 @@ type Game struct {
 }
 
 // create new lobby
-func NewLobby(db *database.Database, lobbyID string, lobbyName string, userID string, gameID string, gameName string, gameSlots int) *Lobby {
+func NewLobby(db *database.Database, nexus *Nexus, lobbyID string, lobbyName string, lobbyCode string, userID string, gameID string, gameName string, gameSlots int) *Lobby {
     // create game
     game := &Game{
         ID: gameID,
@@ -40,9 +44,11 @@ func NewLobby(db *database.Database, lobbyID string, lobbyName string, userID st
     // return new lobby
     return &Lobby{
         database: db,
+        nexus: nexus,
         
         ID: lobbyID,
         Name: lobbyName,
+        Code: lobbyCode,
         Game: game,
         LeaderID: userID,
         
@@ -82,8 +88,7 @@ func (l *Lobby) RegisterPlayer(player *Player) {
     initEvent, err := l.NewLobbyInitEvent()
     if err != nil {
         // close player connection
-        close(player.Send)
-        delete(l.Players, player)
+        l.PlayerClose(player)
 
         // log error
         log.Printf("[ERROR] init lobby event: ", err)
@@ -109,8 +114,7 @@ func (l *Lobby) RegisterPlayer(player *Player) {
 // unregister a player with lobby
 func (l *Lobby) UnregisterPlayer(player *Player) {
     if _, ok := l.Players[player]; ok {
-        close(player.Send)
-        delete(l.Players, player)
+        l.PlayerClose(player)
     }    
 }
 
@@ -120,8 +124,7 @@ func (l *Lobby) SendPlayers(message []byte) {
         select {
             case player.Send <- message:
             default:
-                close(player.Send)
-                delete(l.Players, player)
+                l.PlayerClose(player)
         }
     }
 }
@@ -131,14 +134,63 @@ func (l *Lobby) SendPlayersExcept(p *Player, message []byte) {
     for player := range l.Players {
         // skip excepted player
         if player == p {
-            break
+            continue
         }
         // send message to players
         select {
             case player.Send <- message:
             default:
-                close(player.Send)
-                delete(l.Players, player)
+                l.PlayerClose(player)
+        }
+    }
+}
+
+// get player in lobby by id
+func (l *Lobby) GetPlayerByID(userID string) (*Player, error) {
+    for player := range l.Players {
+        if player.ID == userID {
+            return player, nil
+        }
+    }
+    
+    return nil, fmt.Errorf("unable to find player by id: %s", userID)
+}
+
+// close a player connection on the lobby
+func (l *Lobby) PlayerClose(player *Player) {
+    log.Printf("[INFO] closing player: %+v", player)
+    
+    // close player connection
+    close(player.Send)
+
+    // remove player from lobby
+    delete(l.Players, player)
+    
+    // remove lobby from nexus if no more players
+    if len(l.Players) == 0 {
+        l.nexus.LobbyClose(l)
+    }
+}
+
+// assign a new player to lobby leader
+func (l *Lobby) AssignNewLeaderExcept(p *Player) {
+    currentLeaderID := l.LeaderID
+    
+    for player := range l.Players {
+        if player.ID != currentLeaderID {
+            l.LeaderID = player.ID
+            
+            // create promote event for remaining players
+            promoteEvent, err := l.NewLobbyPromoteEvent(player.ID)
+            if err != nil {
+                // log error
+                log.Printf("[ERROR] promote leader event: ", err)
+                return
+            }
+
+            // send join event to existing players in lobby
+            l.SendPlayersExcept(p, promoteEvent)
+            break
         }
     }
 }

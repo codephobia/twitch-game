@@ -63,6 +63,9 @@ func (p *Player) ReadPump() {
             if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
                 log.Printf("[ERROR] unexpected close error: %s", err)
             }
+            
+            // TODO: HANDLE UNEXPECTED LEAVE
+            
             break
         }
         
@@ -70,7 +73,7 @@ func (p *Player) ReadPump() {
         event, err := p.Lobby.ValidateEvent(p, message)
         if err != nil {
             log.Printf("[ERROR] read event: %s", err)
-            break
+            continue
         }
         
         // execute the event
@@ -80,7 +83,7 @@ func (p *Player) ReadPump() {
         eventMessage, err := event.Event().Generate()
         if err != nil {
             log.Printf("[ERROR] read event: %s", err)
-            break
+            continue
         }
         
         // broadcast message
@@ -126,4 +129,9 @@ func (p *Player) WritePump() {
             }
         }
     }
+}
+
+// return if the player is the leader of the lobby
+func (p *Player) IsLeader() bool {
+    return p.ID == p.Lobby.LeaderID
 }

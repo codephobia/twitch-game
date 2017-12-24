@@ -1,0 +1,13 @@
+@import 'partials/colors';
+
+.md-toast-content {
+    text-transform: uppercase;
+    
+    &.success {
+        background-color: $successGreen;
+    }
+    
+    &.error {
+        background-color: $errorRed;
+    }
+}

@@ -17,7 +17,8 @@
             margin-right: 20px;
         }
         
-        &:hover {
+        &:hover,
+        &:focus {
             background: rgba($twitchPurple, .4);
         }
     }

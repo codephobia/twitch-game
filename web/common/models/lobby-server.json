@@ -11,8 +11,23 @@
 		"lobbyId": {
             "type": "string"
         },
+        "lobbyName": {
+            "type": "string"
+        },
+        "lobbyCode": {
+            "type": "string"
+        },
 		"userId": {
             "type": "string"
+        },
+        "gameId": {
+            "type": "string"
+        },
+        "gameName": {
+            "type": "string"
+        },
+        "gameSlots": {
+            "type": "number"
         }
 	},
 	"relations": {

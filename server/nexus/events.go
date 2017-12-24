@@ -3,15 +3,8 @@ package nexus
 import (
     "encoding/json"
     "fmt"
+    "log"
 )
-
-// lobby init data
-type LobbyInitData struct {
-    LobbyName string       `json:"lobbyName"`
-    Players  []*LobbyPlayer `json:"players"`
-    Locked   bool          `json:"locked"`
-    Game     *Game         `json:"game"`
-}
 
 // lobby player data
 type LobbyPlayer struct {
@@ -102,18 +95,54 @@ type LobbyPartEvent struct {
     LobbyEventPleb
 }
 
-func (e *LobbyPartEvent) Execute() {    
-    //e.Lobby.PlayerPart(e.Player.ID)
+// execute player part
+func (e *LobbyPartEvent) Execute() {
+    isLeader := e.Player.IsLeader()
+    playersCount := len(e.Lobby.Players)
+
+    // check if we need to handle assigning a new leader
+    if (isLeader && playersCount > 1) {
+        e.Lobby.AssignNewLeaderExcept(e.Player)
+    }
+
+    // close player connection
+    e.Lobby.PlayerClose(e.Player)
 }
 
 type LobbyKickEvent struct {
-    Lobby *Lobby
+    Lobby  *Lobby
+    Player *Player
     
     *LobbyEvent
     LobbyEventLeader
 }
 
-func (e *LobbyKickEvent) Execute() {    
+func (e *LobbyKickEvent) Execute() {
+    // get kick data
+    data := e.Event().Data.(map[string]interface{})
+    userID := data["userId"].(string)
+    
+    // find player to kick
+    player, err := e.Lobby.GetPlayerByID(userID)
+    if err != nil {
+        // log error
+        log.Printf("[ERROR] lobby kick event: ", err)
+        return
+    }
+    
+    // create kick event
+    kickEvent, err := e.Lobby.NewLobbyKickEvent(player.ID)
+    if err != nil {
+        // log error
+        log.Printf("[ERROR] lobby kick event: ", err)
+        return
+    }
+    
+    // send player kick message
+    player.Send <- kickEvent
+    
+    // close player connection
+    e.Lobby.PlayerClose(player)
 }
 
 type LobbyLockEvent struct {
@@ -126,6 +155,21 @@ type LobbyLockEvent struct {
 func (e *LobbyLockEvent) Execute() {
     data := e.Event().Data.(map[string]interface{})
     e.Lobby.Locked = data["locked"].(bool)
+}
+
+// event to promote a new player to leader
+type LobbyPromoteEvent struct {
+    Lobby  *Lobby
+    Player *Player
+
+    *LobbyEvent
+    LobbyEventLeader
+}
+
+// execute player promote
+func (e *LobbyPromoteEvent) Execute() {
+    data := e.Event().Data.(map[string]interface{})
+    e.Lobby.LeaderID = data["userId"].(string)
 }
 
 func (l *Lobby) ValidateEvent(p *Player, e []byte) (LobbyEventProvider, error) {
@@ -148,6 +192,8 @@ func (l *Lobby) ValidateEvent(p *Player, e []byte) (LobbyEventProvider, error) {
             lobbyEventProvider = &LobbyPartEvent{Lobby: l, Player: p, LobbyEvent: lobbyEvent}
         case "LOBBY_KICK":
             lobbyEventProvider = &LobbyKickEvent{Lobby: l, LobbyEvent: lobbyEvent}
+        case "LOBBY_PROMOTE":
+            lobbyEventProvider = &LobbyPromoteEvent{Lobby: l, Player: p, LobbyEvent: lobbyEvent}
         default:
             return nil, fmt.Errorf("invalid event: %s", lobbyEvent.Name)
     }
@@ -158,6 +204,15 @@ func (l *Lobby) ValidateEvent(p *Player, e []byte) (LobbyEventProvider, error) {
     }
     
     return lobbyEventProvider, nil
+}
+
+// lobby init data
+type LobbyInitData struct {
+    LobbyName string        `json:"lobbyName"`
+    LobbyCode string        `json:"lobbyCode"`
+    Players  []*LobbyPlayer `json:"players"`
+    Locked   bool           `json:"locked"`
+    Game     *Game          `json:"game"`
 }
 
 // create new lobby init event
@@ -171,6 +226,7 @@ func (l *Lobby) NewLobbyInitEvent() ([]byte, error) {
             Name: "LOBBY_INIT",
             Data: &LobbyInitData{
                 LobbyName: l.Name,
+                LobbyCode: l.Code,
                 Players: players,
                 Locked: l.Locked,
                 Game: l.Game,
@@ -204,6 +260,58 @@ func (l *Lobby) NewLobbyJoinEvent(player *Player) ([]byte, error) {
                     Username: player.Username,
                     IsLeader: false,
                 },
+            },
+        },
+    }
+    
+    // generate message
+    message, err := event.Event().Generate()
+    if err != nil {
+        return nil, err
+    }
+    
+    // return event string
+    return message, nil
+}
+
+type LobbyPromoteData struct {
+    UserID string `json:"userId"`
+}
+
+// create new lobby promote event
+func (l *Lobby) NewLobbyPromoteEvent(userID string) ([]byte, error) {
+    // create event
+    event := &LobbyPromoteEvent{
+        LobbyEvent: &LobbyEvent{
+            Name: "LOBBY_PROMOTE",
+            Data: &LobbyPromoteData{
+                UserID: userID,
+            },
+        },
+    }
+    
+    // generate message
+    message, err := event.Event().Generate()
+    if err != nil {
+        return nil, err
+    }
+    
+    // return event string
+    return message, nil
+}
+
+type LobbyKickData struct {
+    UserID string `json:"userId"`
+}
+
+// create new lobby promote event
+func (l *Lobby) NewLobbyKickEvent(userID string) ([]byte, error) {
+    // create event
+    event := &LobbyPromoteEvent{
+        LobbyEvent: &LobbyEvent{
+            Name: "LOBBY_KICK",
+            Data: &LobbyKickData{
+                UserID: userID,
             },
         },
     }

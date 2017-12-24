@@ -10,6 +10,9 @@
 	"properties": {
 		"name": {
             "type": "string"
+        },
+        "code": {
+            "type": "string"
         }
 	},
 	"relations": {

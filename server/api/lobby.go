@@ -24,6 +24,8 @@ func (api *Api) handleLobby() http.Handler {
 type LobbyCreateRequest struct {
     LobbyID   string `json:"lobby_id"`
     LobbyName string `json:"lobby_name"`
+    LobbyCode string `json:"lobby_code"`
+    
     UserID    string `json:"user_id"`
     
     GameID    string `json:"game_id"`
@@ -47,6 +49,7 @@ func (api *Api) handleLobbyPost(w http.ResponseWriter, r *http.Request) {
     api.nexus.InitNewLobby(
         createRequest.LobbyID,
         createRequest.LobbyName,
+        createRequest.LobbyCode,
         createRequest.UserID,
         createRequest.GameID,
         createRequest.GameName,
@@ -80,6 +83,18 @@ func (api *Api) handleLobbyJoinGet(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         log.Printf("[ERROR] lobby join: %s", err)
         api.handleError(w, 404, err)
+        return
+    }
+    
+    // check if lobby is locked
+    if lobby.Locked {
+        api.handleError(w, 423, fmt.Errorf("[ERROR] lobby join: lobby is locked"))
+        return
+    }
+    
+    // check if lobby is full
+    if len(lobby.Players) >= lobby.Game.Slots {
+        api.handleError(w, 403, fmt.Errorf("[ERROR] lobby join: lobby is full"))
         return
     }
     

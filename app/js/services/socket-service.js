@@ -29,6 +29,7 @@ angular.module('app.services')
         // handle websocket message
         self.conn.onmessage = function (msg) {
             msg = JSON.parse(msg.data);
+            console.log('[INFO] event received: ', msg);
             
             var event = msg[0];
             var data = msg[1];
@@ -45,8 +46,13 @@ angular.module('app.services')
         };
         
         // handle websocket close
-        self.conn.onclose = function () {
+        self.conn.onclose = function (event) {
             self.callbacks['close']();
+        };
+        
+        // handle websocket error
+        self.conn.onerror = function (event) {
+            console.log("error event: ", event);
         };
     };
 

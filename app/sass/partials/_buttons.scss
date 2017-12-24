@@ -2,20 +2,42 @@
 
 /* buttons */
 .btn {
+    position: relative;
     padding: 20px;
     color: #fff;
     font-size: 20px;
+    line-height: 20px;
     text-transform: capitalize;
     border: 2px solid rgba(255,255,255,.3);
     background: rgba(white, .1);
     width: 300px;
+    opacity: 1;
 
     outline: none;
     transition: background .2s ease-in, border .2s ease-in;
     
-    &:hover {
+    &:hover,
+    &:focus {
         border: 2px solid rgba(white,.8);
         background: rgba(white, .4);
+    }
+    
+    .loading {
+        position: absolute;
+        top: 50%;
+        right: 0px;
+        margin-top: -10px;
+        padding-right: 20px;
+    }
+    
+    &:disabled {
+        opacity: 0.5;
+        
+        &:hover,
+        &:focus {
+            border: 2px solid rgba(255,255,255,.3);
+            background: rgba(white, .1);
+        }
     }
 }
 

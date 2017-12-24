@@ -1,0 +1,44 @@
+@import 'colors';
+
+.app-context-menu {
+    padding: 0px;
+    background-color: transparent;
+    border: 2px solid white;
+
+    .player-context-menu-title {
+        padding: 4px 12px 6px;
+        font-size: 15px;
+        color: black;
+        background: white;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    
+    md-menu-item {
+        height: 30px;
+        min-height: 30px;
+        min-width: 200px;
+        
+        button {
+            margin: 0px;
+            color: white;
+            background: black;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid white;
+            text-align: left;
+            padding: 0 10px;
+            transition: background .2s ease-in;
+            
+            &:hover {
+                background: $twitchPurple;
+            }
+        }
+
+        &:last-child {
+            button {
+                border-bottom: none;
+            }
+        }
+    }
+}

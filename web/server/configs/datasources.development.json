@@ -27,6 +27,7 @@
                     "body": {
                         "lobby_id": "{lobbyId}",
                         "lobby_name": "{lobbyName}",
+                        "lobby_code": "{lobbyCode}",
                         "user_id": "{userId}",
                         "game_id": "{gameId}",
                         "game_name": "{gameName}",
@@ -37,6 +38,7 @@
                     "createLobby": [
                         "lobbyId",
                         "lobbyName",
+                        "lobbyCode",
                         "userId",
                         "gameId",
                         "gameName",

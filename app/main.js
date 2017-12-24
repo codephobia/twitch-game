@@ -1,13 +1,18 @@
+// electron
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const debug = require('./lib/debug');
 
+// node
 const path = require('path');
 const url = require('url');
 
+// app
 const oauth = require('./lib/oauth');
+const cookies = require('./lib/cookies');
 
+// main window
 let mainWindow;
 
 function createWindow() {
@@ -26,9 +31,13 @@ function createWindow() {
 
     debug.init(mainWindow);
     oauth.init(mainWindow);
+    cookies.init();
     
     mainWindow.on('closed', function () {
         mainWindow = null;
+        
+        // save cookies to disk
+        cookies.save();
     });
 }
 

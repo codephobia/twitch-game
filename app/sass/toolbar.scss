@@ -1,3 +1,5 @@
+@import 'partials/menus';
+
 .toolbar {
     position: absolute;
     text-align: right;
@@ -105,36 +107,5 @@
 }
 
 .profile-menu-content {
-    padding: 0px;
-    background-color: transparent;
-    border: 2px solid white;
-
-    md-menu-item {
-        height: 30px;
-        min-height: 30px;
-        min-width: 200px;
-        
-        button {
-            color: white;
-            background: rgba(white, .1);
-            border: none;
-            outline: none;
-            border-bottom: 2px solid white;
-            text-align: left;
-            padding: 0 10px;
-            transition: background .2s ease-in;
-            
-            &:hover {
-                background: rgba(white, .4);
-            }
-        }
-
-        &:last-child {
-            button {
-                border-bottom: none;
-            }
-        }
-
-
-    }                
+    @extend .app-context-menu;        
 }
