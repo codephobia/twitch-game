@@ -75,9 +75,15 @@
         }/* game-type */
         
         .lobby-name {
-            margin: 0px 20px 20px 20px;
+            margin: 0px 20px 20px;
             
-            @extend .app-input;
+            md-input-container {
+                @extend .app-input;
+            }
+        }
+        
+        .lobby-settings {
+            margin: 0px 20px 20px;
         }
         
         .lobby-submit {
@@ -97,7 +103,9 @@
         .lobby-code {
             margin: 0px 20px 20px 20px;
             
-            @extend .app-input;
+            md-input-container {
+                @extend .app-input;
+            }
             
             input {
                 text-transform: uppercase;
@@ -224,6 +232,112 @@
             text-align: center;
         }
         
+    }
+    
+    .lobby-find {
+        .section-title {
+            margin: 20px 20px 50px 20px;
+            font-size: 15px;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        .filters {
+            margin: 0 20px 20px;
+            text-align: right;
+            
+            .search {
+                @extend .app-input;
+                @extend .app-input-sm;
+                
+                input {
+                    padding-right: 25px;
+                }
+                
+                &:after {
+                    position: absolute;
+                    top: 11px;
+                    right: 10px;
+                    font-family: "FontAwesome";
+                    content: "\f002";
+                    color: rgba(255,255,255,.3);
+                    pointer-events: none;
+                    transition: color .2s ease-in;
+                }
+
+                &:hover,
+                &.md-input-focused,
+                &.md-input-has-value {
+                    &:after {
+                        color: rgba(255,255,255,.8);
+                    }
+                }
+            }
+        }
+        
+        .lobby-list {
+            margin: 0px 20px;
+            
+            table {
+                border-collapse: collapse;
+                border: 2px solid white;
+                
+                thead {
+                    background: white;
+                    
+                    tr {
+                        th {
+                            padding: 6px 10px;
+                            color: black;
+                            font-size: 15px;
+                            white-space: nowrap;
+
+                            &.name {
+                                width: 100%;
+                            }
+
+                            &.name,
+                            &.game {
+                                text-align: left;
+                            }
+                        }
+                    }
+                }
+                
+                tbody {
+                    tr {
+                        border-bottom: 2px solid white;
+                        background: rgba(255,255,255,.1);
+                        transition: background 0.1s ease-in;
+                        
+                        &:last-child {
+                            border-bottom: none;
+                        }
+                        
+                        &:hover {
+                            background: rgba(255,255,255,.3);
+                        }
+                        
+                        td {
+                            padding: 6px 10px;
+                            white-space: nowrap;
+                            color: white;
+                            cursor: pointer;
+                            
+                            &.name {
+                                width: 100%;
+                            }
+
+                            &.players,
+                            &.locked {
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
     }
 }/* lobbies */
 

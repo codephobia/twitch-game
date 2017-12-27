@@ -9,6 +9,11 @@ type LobbyPartEvent struct {
     LobbyEventPleb
 }
 
+// part event data
+type LobbyPartData struct {
+    UserID string `json:"userId"`
+}
+
 // execute player part
 func (e *LobbyPartEvent) Execute() {
     isLeader := e.Player.IsLeader()
@@ -19,6 +24,11 @@ func (e *LobbyPartEvent) Execute() {
         e.Lobby.AssignNewLeaderExcept(e.Player)
     }
 
+    // update event data to include user id
+    e.Event().Data = &LobbyPartData{
+        UserID: e.Player.ID,
+    }
+    
     // close player connection
     e.Lobby.PlayerClose(e.Player)
 }

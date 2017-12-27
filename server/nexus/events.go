@@ -40,6 +40,8 @@ func (l *Lobby) ValidateEvent(p *Player, e []byte) (LobbyEventProvider, error) {
     switch lobbyEvent.Name {
         case "LOBBY_LOCK":
             lobbyEventProvider = &LobbyLockEvent{Lobby: l, LobbyEvent: lobbyEvent}
+        case "LOBBY_PUBLIC":
+            lobbyEventProvider = &LobbyPublicEvent{Lobby: l, LobbyEvent: lobbyEvent}
         case "LOBBY_PART":
             lobbyEventProvider = &LobbyPartEvent{Lobby: l, Player: p, LobbyEvent: lobbyEvent}
         case "LOBBY_KICK":

@@ -14,6 +14,7 @@ type Lobby struct {
     ID       string
     Name     string
     Code     string
+    Public   bool
     
     Game     *Game
     LeaderID string
@@ -27,18 +28,20 @@ type Lobby struct {
 }
 
 type Game struct {
-    ID    string `json:"id"`
-    Name  string `json:"name"`
-    Slots int    `json:"slots"`
+    ID       string `json:"id"`
+    Name     string `json:"name"`
+    SlotsMin int    `json:"slotsMin"`
+    SlotsMax int    `json:"slotsMax"`
 }
 
 // create new lobby
-func NewLobby(db *database.Database, nexus *Nexus, lobbyID string, lobbyName string, lobbyCode string, userID string, gameID string, gameName string, gameSlots int) *Lobby {
+func NewLobby(db *database.Database, nexus *Nexus, lobbyID string, lobbyName string, lobbyCode string, public bool, userID string, gameID string, gameName string, gameSlotsMin int, gameSlotsMax int) *Lobby {
     // create game
     game := &Game{
         ID: gameID,
         Name: gameName,
-        Slots: gameSlots,
+        SlotsMin: gameSlotsMin,
+        SlotsMax: gameSlotsMax,
     }
     
     // return new lobby
@@ -49,6 +52,7 @@ func NewLobby(db *database.Database, nexus *Nexus, lobbyID string, lobbyName str
         ID: lobbyID,
         Name: lobbyName,
         Code: lobbyCode,
+        Public: public,
         Game: game,
         LeaderID: userID,
         
@@ -109,6 +113,11 @@ func (l *Lobby) RegisterPlayer(player *Player) {
     
     // send join event to existing players in lobby
     l.SendPlayersExcept(player, joinEvent)
+    
+    // update number of players on database
+    if err := l.database.UpdateLobbyPlayers(l.ID, len(l.Players)); err != nil {
+        log.Printf("[ERROR] lobby update players: ", err)
+    }
 }
 
 // unregister a player with lobby
@@ -116,6 +125,11 @@ func (l *Lobby) UnregisterPlayer(player *Player) {
     if _, ok := l.Players[player]; ok {
         l.PlayerClose(player)
     }    
+
+    // update number of players on database
+    if err := l.database.UpdateLobbyPlayers(l.ID, len(l.Players)); err != nil {
+        log.Printf("[ERROR] lobby update players: ", err)
+    }
 }
 
 // send all players an event
@@ -200,6 +214,7 @@ type LobbyPlayer struct {
     Username string `json:"username"`
     IsLeader bool   `json:"isLeader"`
     UserID   string `json:"userId"`
+    JoinTime int64  `json:"joinTime"`
 }
 
 // get all players data in the lobby
@@ -210,7 +225,8 @@ func (l *Lobby) GetPlayersData() []*LobbyPlayer {
         players = append(players, &LobbyPlayer{
             Username: player.Username,
             IsLeader: l.LeaderID == player.ID,
-            UserID: player.ID,
+            UserID:   player.ID,
+            JoinTime: player.JoinTime.Unix(),
         })
     }
     

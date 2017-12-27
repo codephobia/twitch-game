@@ -26,7 +26,10 @@
         "gameName": {
             "type": "string"
         },
-        "gameSlots": {
+        "gameSlotsMin": {
+            "type": "number"
+        },
+        "gameSlotsMax": {
             "type": "number"
         }
 	},

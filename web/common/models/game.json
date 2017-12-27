@@ -11,7 +11,10 @@
 		"name": {
             "type": "string"
         },
-        "slots": {
+        "slotsMin": {
+            "type": "number"
+        },
+        "slotsMax": {
             "type": "number"
         }
 	},

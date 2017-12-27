@@ -13,6 +13,18 @@
         },
         "code": {
             "type": "string"
+        },
+        "public": {
+            "type": "boolean",
+            "default": true
+        },
+        "locked": {
+            "type": "boolean",
+            "default": false
+        },
+        "players": {
+            "type": "number",
+            "default": 0
         }
 	},
 	"relations": {

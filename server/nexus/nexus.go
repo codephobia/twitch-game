@@ -22,8 +22,8 @@ func NewNexus(db *database.Database) *Nexus {
 }
 
 // init a new lobby in the nexus
-func (n *Nexus) InitNewLobby(lobbyID string, lobbyName string, lobbyCode string, userID string, gameID string, gameName string, gameSlots int) {
-    n.Lobbies[lobbyID] = NewLobby(n.database, n, lobbyID, lobbyName, lobbyCode, userID, gameID, gameName, gameSlots)
+func (n *Nexus) InitNewLobby(lobbyID string, lobbyName string, lobbyCode string, public bool, userID string, gameID string, gameName string, gameSlotsMin int, gameSlotsMax int) {
+    n.Lobbies[lobbyID] = NewLobby(n.database, n, lobbyID, lobbyName, lobbyCode, public, userID, gameID, gameName, gameSlotsMin, gameSlotsMax)
     go n.Lobbies[lobbyID].Run()
 }
 

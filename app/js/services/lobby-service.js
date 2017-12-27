@@ -4,8 +4,11 @@ angular.module('app.services')
         var connected = false;
         var game = null;
         var slots = [];
+        var slotsMin = 0;
+        var slotsMax = 0;
         var players = [];
         var locked = false;
+        var public = false;
         var lobbyName = "";
         var lobbyCode = false;
         var conn;
@@ -30,95 +33,18 @@ angular.module('app.services')
             );
             
             // init the connection bindings
-            connectionInit();
+            connInit();
         }
 
         // init lobby connection binds
-        function connectionInit() {
-            conn.bind('LOBBY_INIT', function (data) {
-                $timeout(function () {
-                    connected = true;
-                    game = data.game;
-                    slots = new Array(game.slots);
-                    players = data.players;
-                    lobbyName = data.lobbyName;
-                    lobbyCode = data.lobbyCode;
-                    locked = data.locked;
-                });
-            });
-            
-            conn.bind('LOBBY_LOCK', function (data) {
-                console.log('[INFO] event: lobby lock: ', data);
-                
-                $timeout(function () {
-                    locked = data.locked;
-                });
-
-                if (data.locked) {
-                    ToastService.show('The lobby is now locked', 'success');
-                } else {
-                    ToastService.show('The lobby is now unlocked', 'success');
-                }
-            });
-            
-            conn.bind('LOBBY_JOIN', function (data) {
-                console.log('[INFO] event: lobby join: ', data);
-                $timeout(function () {
-                    players.push(data.player);
-                });
-            });
-            
-            conn.bind('LOBBY_PART', function (data) {
-                console.log('[INFO] event: lobby part: ', data);
-                for (var i = players.length - 1; i >= 0; i--) {
-                    if (players[i].userId === data.userId) {
-                        
-                        ToastService.show(usernameFilter(players[i].username) + ' has left the lobby', 'success');
-                        
-                        $timeout(function () {
-                            players.splice(i, 1);
-                        });
-                        break;
-                    }
-                }
-            });
-            
-            conn.bind('LOBBY_PROMOTE', function (data) {
-                console.log('[INFO] event: lobby promote: ', data);
-                var newLeaderId = data.userId;
-                
-                $timeout(function () {
-                    for (var i = 0; i < players.length; i++) {
-                        if (players[i].userId === newLeaderId) {
-                            players[i].isLeader = true;
-                            
-                            // show toast
-                            ToastService.show(usernameFilter(players[i].username) + ' was promoted to leader', 'success');
-                        } else {
-                            players[i].isLeader = false;
-                        }
-                    }
-                });
-            });
-            
-            conn.bind('LOBBY_KICK', function (data) {
-                if (data.userId === userId) {
-                    console.log('[INFO] kicked from lobby');
-                    
-                    // show kicked toast
-                    ToastService.show('You were kicked from the lobby', 'error');
-                } else {
-                    for (var i = players.length - 1; i >= 0; i--) {
-                        if (players[i].userId === data.userId) {
-                            $timeout(function () {
-                                ToastService.show(usernameFilter(players[i].username) + ' was kicked from the lobby', 'success');
-                                players.splice(i, 1);
-                            });
-                            break;
-                        }
-                    }
-                }
-            });
+        function connInit() {
+            conn.bind('LOBBY_INIT', connInitEvent);
+            conn.bind('LOBBY_LOCK', connLockEvent);
+            conn.bind('LOBBY_PUBLIC', connPublicEvent);
+            conn.bind('LOBBY_JOIN', connJoinEvent);
+            conn.bind('LOBBY_PART', connPartEvent);
+            conn.bind('LOBBY_PROMOTE', connPromoteEvent);
+            conn.bind('LOBBY_KICK', connKickEvent);
         }
         
         // return if we're connected to the lobby
@@ -200,14 +126,22 @@ angular.module('app.services')
         
         // toggle if lobby is locked
         function toggleLocked() {
-            conn.send('LOBBY_LOCK', {
-                locked: !locked
-            });
+            conn.send('LOBBY_LOCK');
+        }
+        
+        // toggle if lobby is public
+        function togglePublic() {
+            conn.send('LOBBY_PUBLIC');
         }
         
         // return if lobby is locked
         function isLocked() {
             return locked;
+        }
+        
+        // return if lobby is public
+        function isPublic() {
+            return public;
         }
         
         // return lobby code
@@ -216,9 +150,132 @@ angular.module('app.services')
         }
         
         function part() {
-            conn.send('LOBBY_PART', {
-                userId: userId//LoopBackAuth.currentUserData.id
+            conn.send('LOBBY_PART');
+        }
+        
+        // return if we can start the game
+        function canStart() {
+            return players.length >= slotsMin;
+        }
+        
+        // connection receieved init event
+        function connInitEvent(data) {
+            // sort players array based on join time
+            var p = data.players.sort(function (a, b) {
+                if (a.joinTime < b.joinTime) {
+                    return -1;
+                }
+                if (a.joinTime > b.joinTime) {
+                    return 1;
+                }
+                return 0;
             });
+
+            $timeout(function () {
+                connected = true;
+                game = data.game;
+                slots = new Array(game.slotsMax);
+                slotsMin = game.slotsMin;
+                slotsMax = game.slotsMax;
+                players = p;
+                lobbyName = data.lobbyName;
+                lobbyCode = data.lobbyCode;
+                locked = data.locked;
+                public = data.public;
+            });
+        }
+        
+        // connection received lock event
+        function connLockEvent(data) {
+            console.log('[INFO] event: lobby lock: ', data);
+
+            $timeout(function () {
+                locked = data.locked;
+            });
+
+            if (data.locked) {
+                ToastService.show('The lobby is now locked', 'success');
+            } else {
+                ToastService.show('The lobby is now unlocked', 'success');
+            }
+        }
+        
+        // connection received lock event
+        function connPublicEvent(data) {
+            console.log('[INFO] event: lobby public: ', data);
+
+            $timeout(function () {
+                public = data.public;
+            });
+
+            if (data.public) {
+                ToastService.show('The lobby is now public', 'success');
+            } else {
+                ToastService.show('The lobby is now private', 'success');
+            }
+        }
+        
+        // connection received join event
+        function connJoinEvent(data) {
+            console.log('[INFO] event: lobby join: ', data);
+            $timeout(function () {
+                players.push(data.player);
+            });
+        }
+        
+        // connection receieved part event
+        function connPartEvent(data) {
+            console.log('[INFO] event: lobby part: ', data);
+            for (var i = players.length - 1; i >= 0; i--) {
+                if (players[i].userId === data.userId) {
+
+                    ToastService.show(usernameFilter(players[i].username) + ' has left the lobby', 'success');
+
+                    $timeout(function () {
+                        players.splice(i, 1);
+                    });
+                    break;
+                }
+            }
+        }
+        
+        // connection received promote event
+        function connPromoteEvent(data) {
+            console.log('[INFO] event: lobby promote: ', data);
+            var newLeaderId = data.userId;
+
+            $timeout(function () {
+                for (var i = 0; i < players.length; i++) {
+                    if (players[i].userId === newLeaderId) {
+                        players[i].isLeader = true;
+
+                        // show toast
+                        ToastService.show(usernameFilter(players[i].username) + ' was promoted to leader', 'success');
+                    } else {
+                        players[i].isLeader = false;
+                    }
+                }
+            });
+        }
+        
+        // connection received kick event
+        function connKickEvent(data) {
+            if (data.userId === userId) {
+                console.log('[INFO] kicked from lobby');
+
+                // show kicked toast
+                ToastService.show('You were kicked from the lobby', 'error');
+            } else {
+                for (var i = players.length - 1; i >= 0; i--) {
+                    if (players[i].userId === data.userId) {
+                        $timeout(function () {
+                            ToastService.show(usernameFilter(players[i].username) + ' was kicked from the lobby', 'success');
+                            players.splice(i, 1);
+                        });
+                        break;
+                    }
+                }
+            }
         }
         
         // return available methods
@@ -231,12 +288,17 @@ angular.module('app.services')
             getPlayer: getPlayer,
             getUsernameByIndex: getUsernameByIndex,
             playerIsLeader: playerIsLeader,
+            getLobbyCode: getLobbyCode,
+            canStart: canStart,
+            
+            isLocked: isLocked,
+            toggleLocked: toggleLocked,
+            
+            isPublic: isPublic,
+            togglePublic: togglePublic,
+            
             promoteToLeader: promoteToLeader,
             kickPlayer: kickPlayer,
-            toggleLocked: toggleLocked,
-            isLocked: isLocked,
-            getLobbyCode: getLobbyCode,
-            
             part: part,
         };
     }

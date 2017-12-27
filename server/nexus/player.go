@@ -21,6 +21,7 @@ type Player struct {
     
     ID       string
     Username string
+    JoinTime time.Time
     
     Lobby    *Lobby
     conn     *websocket.Conn
@@ -38,8 +39,9 @@ func NewPlayer(db *database.Database, userID string, l *Lobby, c *websocket.Conn
     return &Player{
         database: db,
         
-        ID:    userID,
+        ID:       userID,
         Username: user.Username,
+        JoinTime: time.Now(),
         
         Lobby: l,
         conn:  c,

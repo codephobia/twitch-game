@@ -58,12 +58,15 @@
             </ul>
         </div>
         <div class="lobby-settings">
+            <button class="btn-clear m-r-md" ng-click="lobby.togglePublic()" ng-if="lobby.playerIsLeader()">
+                <i class="fa m-r-sm" ng-class="{ 'fa-lock': !lobby.isPublic(), 'fa-unlock-alt': lobby.isPublic() }"></i><span ng-if="lobby.isPublic()">Public</span><span ng-if="!lobby.isPublic()">Private</span> Lobby
+            </button>
             <button class="btn-clear" ng-click="lobby.toggleLocked()" ng-if="lobby.playerIsLeader()">
                 <i class="fa m-r-sm" ng-class="{ 'fa-lock': lobby.isLocked(), 'fa-unlock-alt': !lobby.isLocked() }"></i>Lobby <span ng-if="lobby.isLocked()">Locked</span><span ng-if="!lobby.isLocked()">Unlocked</span>
             </button>
         </div>
         <div class="lobby-submit">
-            <button class="btn">Start Game</button>
+            <button class="btn" ng-disabled="!lobby.canStart()" ng-if="lobby.playerIsLeader()">Start Game</button>
         </div>
     </div>
 </div>

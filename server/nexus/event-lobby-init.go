@@ -14,6 +14,7 @@ type LobbyInitData struct {
     LobbyCode string        `json:"lobbyCode"`
     Players  []*LobbyPlayer `json:"players"`
     Locked   bool           `json:"locked"`
+    Public   bool           `json:"public"`
     Game     *Game          `json:"game"`
 }
 
@@ -31,6 +32,7 @@ func (l *Lobby) NewLobbyInitEvent() ([]byte, error) {
                 LobbyCode: l.Code,
                 Players: players,
                 Locked: l.Locked,
+                Public: l.Public,
                 Game: l.Game,
             },
         },

@@ -22,6 +22,11 @@
                 <input type="text" id="lobbyName" name="lobbyName" value="" ng-model="lobbyName" ng-disabled="loading" autofocus>
             </md-input-container>
         </div>
+        <div class="lobby-settings">
+            <md-checkbox ng-model="public">
+                Public Lobby
+            </md-checkbox>
+        </div>
         <div class="lobby-submit">
             <button type="submit" class="btn" ng-disabled="loading">
                 <div class="loading" ng-if="loading">

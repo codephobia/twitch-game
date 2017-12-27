@@ -146,8 +146,37 @@ var app = angular.module('app', [
             url: '/find',
             views: {
                 lobby: {
-                    templateUrl: 'lobby/lobbies.find.html'
+                    templateUrl: 'lobby/lobbies.find.html',
+                    controller: 'LobbyFindCtrl'
                 }
+            },
+            resolve: {
+                games: ['Game', function (Game) {
+                    return Game.find({
+                        filter: {
+                            where: {},
+                            fields: ['id', 'name']
+                        }
+                    }).$promise;
+                }],
+                lobbies: ['Lobby', function (Lobby) {
+                    return Lobby.find({
+                        filter: {
+                            where: {
+                                public: true,
+                            },
+                            fields: ['id', 'name', 'locked', 'players', 'gameId'],
+                            include: [
+                                {
+                                    relation: 'game',
+                                    scope: {
+                                        fields: ['name', 'slotsMax']
+                                    }
+                                }
+                            ]
+                        }
+                    }).$promise;
+                }]
             }
         })
         .state('app.games.lobbies.lobby', {

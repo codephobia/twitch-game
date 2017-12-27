@@ -25,12 +25,14 @@ type LobbyCreateRequest struct {
     LobbyID   string `json:"lobby_id"`
     LobbyName string `json:"lobby_name"`
     LobbyCode string `json:"lobby_code"`
+    Public    bool   `json:"public"`
     
     UserID    string `json:"user_id"`
     
-    GameID    string `json:"game_id"`
-    GameName  string `json:"game_name"`
-    GameSlots int    `json:"game_slots"`
+    GameID       string `json:"game_id"`
+    GameName     string `json:"game_name"`
+    GameSlotsMin int    `json:"game_slots_min"`
+    GameSlotsMax int    `json:"game_slots_max"`
 }
 
 // handleLobbyPost
@@ -50,10 +52,12 @@ func (api *Api) handleLobbyPost(w http.ResponseWriter, r *http.Request) {
         createRequest.LobbyID,
         createRequest.LobbyName,
         createRequest.LobbyCode,
+        createRequest.Public,
         createRequest.UserID,
         createRequest.GameID,
         createRequest.GameName,
-        createRequest.GameSlots,
+        createRequest.GameSlotsMin,
+        createRequest.GameSlotsMax,
     )
 }
 
@@ -93,7 +97,7 @@ func (api *Api) handleLobbyJoinGet(w http.ResponseWriter, r *http.Request) {
     }
     
     // check if lobby is full
-    if len(lobby.Players) >= lobby.Game.Slots {
+    if len(lobby.Players) >= lobby.Game.SlotsMax {
         api.handleError(w, 403, fmt.Errorf("[ERROR] lobby join: lobby is full"))
         return
     }
