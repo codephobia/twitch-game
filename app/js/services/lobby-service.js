@@ -11,6 +11,7 @@ angular.module('app.services')
         var public = false;
         var lobbyName = "";
         var lobbyCode = false;
+        var lobbyCodeBlur = false;
         var conn;
 
         var userId = $rootScope.userId;
@@ -147,6 +148,16 @@ angular.module('app.services')
         // return lobby code
         function getLobbyCode() {
             return lobbyCode || "";
+        }
+        
+        // return lobby code blur
+        function getLobbyCodeBlur() {
+            return lobbyCodeBlur;
+        }
+        
+        // toggle lobby code blur
+        function toggleLobbyCodeBlur() {
+            lobbyCodeBlur = !lobbyCodeBlur;
         }
         
         function part() {
@@ -289,6 +300,8 @@ angular.module('app.services')
             getUsernameByIndex: getUsernameByIndex,
             playerIsLeader: playerIsLeader,
             getLobbyCode: getLobbyCode,
+            getLobbyCodeBlur: getLobbyCodeBlur,
+            toggleLobbyCodeBlur: toggleLobbyCodeBlur,
             canStart: canStart,
             
             isLocked: isLocked,

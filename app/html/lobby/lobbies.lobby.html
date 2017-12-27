@@ -18,7 +18,9 @@
             {{lobby.getGame().name}}
         </div>
         <div class="game-code">
-            {{lobby.getLobbyCode()}}
+            <div ng-class="{ 'blurred': lobby.getLobbyCodeBlur() }" ng-click="lobby.toggleLobbyCodeBlur()">
+                {{lobby.getLobbyCode()}}
+            </div>
         </div>
         <div class="player-slots-wrapper" layout="row" layout-align="center start">
             <ul class="player-slots" layout="row" layout-align="stretch start" flex>
