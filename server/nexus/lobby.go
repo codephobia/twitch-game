@@ -194,3 +194,25 @@ func (l *Lobby) AssignNewLeaderExcept(p *Player) {
         }
     }
 }
+
+// lobby player data
+type LobbyPlayer struct {
+    Username string `json:"username"`
+    IsLeader bool   `json:"isLeader"`
+    UserID   string `json:"userId"`
+}
+
+// get all players data in the lobby
+func (l *Lobby) GetPlayersData() []*LobbyPlayer {
+    players := make([]*LobbyPlayer, 0)
+    
+    for player, _ := range l.Players {
+        players = append(players, &LobbyPlayer{
+            Username: player.Username,
+            IsLeader: l.LeaderID == player.ID,
+            UserID: player.ID,
+        })
+    }
+    
+    return players
+}
