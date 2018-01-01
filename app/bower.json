@@ -25,6 +25,8 @@
     "angular-resource": "^1.6.7",
     "angular-cookies": "^1.6.7",
     "jquery": "^3.2.1",
-    "async": "^2.6.0"
+    "async": "^2.6.0",
+    "angular-live-set": "*",
+    "utatti-perfect-scrollbar": "^1.3.0"
   }
 }

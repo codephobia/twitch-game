@@ -1,6 +1,33 @@
 angular.module('app.services')
 .service('LobbyService', ['$rootScope', '$state', '$interval', '$timeout', 'usernameFilter', 'LoopBackAuth', 'SocketService', 'ToastService', 
     function ($rootScope, $state, $interval, $timeout, usernameFilter, LoopBackAuth, SocketService, ToastService) {
+        var colors = [
+            {
+                name: 'purple',
+                hex: '91268f',
+            }, {
+                name: 'blue',
+                hex: '00adef',
+            }, {
+                name: 'pink',
+                hex: 'ed2a7b',
+            }, {
+                name: 'orange',
+                hex: 'f7931d',
+            }, {
+                name: 'green',
+                hex: '009344',
+            }, {
+                name: 'brown',
+                hex: '8a5d3b',
+            }, {
+                name: 'yellow',
+                hex: 'd6df23',
+            }, {
+                name: 'red',
+                hex: 'be1e2d',
+            }];
+        
         var connected = false;
         var game = null;
         var slots = [];
@@ -46,6 +73,22 @@ angular.module('app.services')
             conn.bind('LOBBY_PART', connPartEvent);
             conn.bind('LOBBY_PROMOTE', connPromoteEvent);
             conn.bind('LOBBY_KICK', connKickEvent);
+            conn.bind('LOBBY_GAME_START', connGameStartEvent);
+        }
+        
+        // game bind an event to lobby
+        function gameBind(event, callback) {
+            conn.bind('GAME_' + event, callback);
+        }
+        
+        // game unbind an event from lobby
+        function gameUnbind(event) {
+            conn.unbind('GAME_' + event);
+        }
+        
+        // game send an event to the server
+        function gameSend(event, data) {
+            conn.send('GAME_' + event, data);
         }
         
         // return if we're connected to the lobby
@@ -68,6 +111,11 @@ angular.module('app.services')
             return getPlayerById(currentPlayerId);
         }
         
+        // get lobby players
+        function getPlayers() {
+            return players;
+        }
+        
         // get lobby player
         function getPlayer(index) {
             return players[index];
@@ -82,6 +130,15 @@ angular.module('app.services')
             return players[index].username;
         }
         
+        // get the player avatar shape by slot index
+        function getPlayerAvatarShape(index) {
+            if (!players[index]) {
+                return '';
+            }
+            
+            return players[index].avatar.shape;
+        }
+        
         function getPlayerById(userId) {
             for (var i = 0; i < players.length; i++) {
                 if (players[i].userId === userId) {
@@ -90,6 +147,16 @@ angular.module('app.services')
             }
             
             return false;
+        }
+        
+        // get colors
+        function getColors() {
+            return colors;
+        }
+        
+        // return player color
+        function getPlayerColorByIndex(index) {
+            return colors[index].name;
         }
         
         // check if player is leader
@@ -162,11 +229,23 @@ angular.module('app.services')
         
         function part() {
             conn.send('LOBBY_PART');
+            conn.close();
         }
         
         // return if we can start the game
         function canStart() {
             return players.length >= slotsMin;
+        }
+        
+        // start the game
+        function gameStart() {
+            // check if we can start the game
+            if (!canStart()) {
+                return;
+            }
+            
+            // send start game event to server
+            conn.send('LOBBY_GAME_START');
         }
         
         // connection receieved init event
@@ -289,6 +368,25 @@ angular.module('app.services')
             }
         }
         
+        // connection received game start event
+        function connGameStartEvent(data) {
+            $state.go('app.games.test');
+        }
+        
+        // handle logout, and send part event if we're connected
+        $rootScope.$on('APP_LOGOUT', function () {
+            if (connected) {
+                part();
+            }
+        });
+        
+        // handle app close, and send part event if we're connected
+        $rootScope.$on('APP_CLOSE', function () {
+            if (connected) {
+                part();
+            }
+        });
+        
         // return available methods
         return {
             init: init,
@@ -296,13 +394,20 @@ angular.module('app.services')
             getGame: getGame,
             getSlots: getSlots,
             getCurrentPlayer: getCurrentPlayer,
+            getPlayers: getPlayers,
+            getColors: getColors,
+            
             getPlayer: getPlayer,
             getUsernameByIndex: getUsernameByIndex,
+            getPlayerAvatarShape: getPlayerAvatarShape,
+            getPlayerColorByIndex: getPlayerColorByIndex,
             playerIsLeader: playerIsLeader,
+            
             getLobbyCode: getLobbyCode,
             getLobbyCodeBlur: getLobbyCodeBlur,
             toggleLobbyCodeBlur: toggleLobbyCodeBlur,
             canStart: canStart,
+            gameStart: gameStart,
             
             isLocked: isLocked,
             toggleLocked: toggleLocked,
@@ -313,6 +418,11 @@ angular.module('app.services')
             promoteToLeader: promoteToLeader,
             kickPlayer: kickPlayer,
             part: part,
+            
+            // methods for game events
+            gameBind: gameBind,
+            gameUnbind: gameUnbind,
+            gameSend: gameSend,
         };
     }
 ]);

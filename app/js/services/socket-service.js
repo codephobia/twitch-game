@@ -82,6 +82,14 @@ angular.module('app.services')
         self.callbacks[event] = callback;
     };
 
+    // unbind a callback from an event name
+    SocketHandler.prototype.unbind = function (event) {
+        var self = this;
+        
+        // delete the event callback
+        delete self.callbacks[event];
+    };
+    
     // send event data to server
     SocketHandler.prototype.send = function (event, data) {
         var self = this;

@@ -1,4 +1,5 @@
 @import 'partials/menus';
+@import 'partials/avatars';
 
 .toolbar {
     position: absolute;
@@ -8,6 +9,34 @@
         padding: 10px;
         top: 0px;
         right: 0px;
+        
+        .btn-friends {
+            margin-top: 10px;
+            width: auto;
+            height: 32px;
+            border: 1px solid rgba(white, .3);
+            background: rgba(black, .1);
+            text-align: left;
+
+            .friends-online,
+            .friends-icon {
+                display: inline-block;
+                width: 30px;
+                height: 30px;
+                color: white;
+                line-height: 30px;
+                text-align: center;
+            }
+
+            .friends-online {
+                width: 31px;
+                border-right: 1px solid rgba(white, .3);
+            }
+
+            .friends-icon {
+
+            }
+        }
     }
     
     &.toolbar-bottom {
@@ -74,7 +103,7 @@
         
         .username {
             position: absolute;
-            right: 70px;
+            right: 80px;
             bottom: 18px;
             color: rgba(white, .5);
             font-size: 15px;
@@ -85,13 +114,15 @@
         
         .avatar {
             position: absolute;
-            right: 0px;
-            bottom: 0px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid rgba(white, .5);
-            transition: border .2s ease-in;
+            right: -34px;
+            bottom: -34px;
+            width: 128px;
+            height: 128px;
+            transform: scale(.75);
+            opacity: .5;
+            transition: opacity .2s ease-in;
+            
+            @extend .app-avatar;
         }
         
         &:hover {
@@ -100,12 +131,12 @@
             }
             
             .avatar {
-                border: 2px solid rgba(white, .8);
+                opacity: .8;
             }
         }
     }
 }
 
 .profile-menu-content {
-    @extend .app-context-menu;        
+    @extend .app-context-menu;
 }

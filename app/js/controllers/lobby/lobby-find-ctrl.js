@@ -1,8 +1,13 @@
 angular.module('app.controllers')
-.controller('LobbyFindCtrl', ['$scope', '$state', 'Lobby', 'games', 'lobbies', function ($scope, $state, Lobby, games, lobbies) {
+.controller('LobbyFindCtrl', ['$scope', '$state', 'LoopBackAuth', 'Lobby', 'dataGames', 'queryLobbies', 'dataLobbies', function ($scope, $state, LoopBackAuth, Lobby, dataGames, queryLobbies, dataLobbies) {
+    // vars
+    var lobbies = dataLobbies;
+    var games = dataGames;
+    
     // scope
     $scope.games = [{ id: 'all', name: 'All Games' }].concat(games);
     $scope.lobbies = lobbies;
+    
     $scope.joinLobby = joinLobby;
     $scope.getLobbies = getLobbies;
     
@@ -13,9 +18,7 @@ angular.module('app.controllers')
     
     // get lobbies
     function getLobbies() {
-        var where = {
-            public: true,
-        };
+        var where = queryLobbies.filter.where;
         
         // check for game filtering
         if ($scope.filters.game !== 'all') {
@@ -31,12 +34,7 @@ angular.module('app.controllers')
         Lobby.find({
             filter: {
                 where: where,
-                include: {
-                    relation: 'game',
-                    scope: {
-                        fields: ['name', 'slotsMax']
-                    }
-                }
+                include: queryLobbies.filter.include,
             }
         })
         .$promise

@@ -6,6 +6,7 @@ type LobbyJoinEvent struct {
 
     *LobbyEvent
     LobbyEventPleb
+    LobbyEventBroadcastable
 }
 
 // join data
@@ -23,6 +24,9 @@ func (l *Lobby) NewLobbyJoinEvent(player *Player) ([]byte, error) {
                 Player: &LobbyPlayer{
                     UserID:   player.ID,
                     Username: player.Username,
+                    Avatar: &LobbyPlayerAvatar{
+                        Shape: player.Avatar.Shape,
+                    },
                     IsLeader: false,
                 },
             },

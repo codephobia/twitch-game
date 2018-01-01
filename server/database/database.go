@@ -12,6 +12,7 @@ import (
 var (
     COLLECTION_LOBBIES string = "lobby"
     COLLECTION_USERS   string = "user"
+    COLLECTION_AVATARS string = "avatar"
 )
 
 type Database struct {
@@ -21,6 +22,7 @@ type Database struct {
     database *mgo.Database
     lobbies  *mgo.Collection
     users    *mgo.Collection
+    avatars  *mgo.Collection
 }
 
 // create new database
@@ -59,6 +61,9 @@ func (db *Database) initDatabase() {
     
     // init users
     db.initUsers()
+
+    // init avatars
+    db.initAvatars()
 }
 
 // init lobbies collection
@@ -69,4 +74,9 @@ func (db *Database) initLobbies() {
 // init users collection
 func (db *Database) initUsers() {
     db.users = db.database.C(COLLECTION_USERS)
+}
+
+// init avatar collection
+func (db *Database) initAvatars() {
+    db.avatars = db.database.C(COLLECTION_AVATARS)
 }

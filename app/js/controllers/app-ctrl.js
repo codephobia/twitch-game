@@ -1,7 +1,33 @@
 angular.module('app.controllers')
-.controller('AppCtrl', ['$rootScope', '$timeout', '$cookies', function ($rootScope, $timeout, $cookies) {
+.controller('AppCtrl', ['$rootScope', '$scope', '$interval', '$cookies', function ($rootScope, $scope, $interval, $cookies) {
     const ipcRenderer = require('electron').ipcRenderer;
 
+    // emit app close on browser window unload
+    window.onbeforeunload = function () {
+        $rootScope.$emit('APP_CLOSE');
+    };
+
+    // friends list
+    var friendsOpen = false;
+    $scope.friendsOpen = function () {
+        return friendsOpen;
+    };
+    
+    // handle friends list toggle event
+    $rootScope.$on('FRIENDS_LIST_TOGGLE', function () {
+        friendsOpen = !friendsOpen;
+    });
+    
+    // handle friends list close event
+    $rootScope.$on('FRIENDS_LIST_CLOSE', function () {
+        friendsOpen = false;
+    });
+    
+    $rootScope.$on('APP_LOGOUT', function () {
+        friendsOpen = false;
+    });
+    
+    // TODO: REMOVE COOKIE USER HACK
     function getCookie(name) {
         ipcRenderer.send('get-cookie', name);
     }

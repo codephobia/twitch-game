@@ -11,6 +11,7 @@ type LobbyKickEvent struct {
     
     *LobbyEvent
     LobbyEventLeader
+    LobbyEventBroadcastable
 }
 
 // kick event data
@@ -53,6 +54,9 @@ func (e *LobbyKickEvent) Execute() {
         log.Printf("[ERROR] lobby kick event: ", err)
         return
     }
+    
+    // set player to kicked
+    player.Kicked = true
     
     // create kick event
     kickEvent, err := e.Lobby.NewLobbyKickEvent(player.ID)

@@ -2,6 +2,8 @@
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const ipc = electron.ipcMain;
+
 const debug = require('./lib/debug');
 
 // node
@@ -20,7 +22,8 @@ function createWindow() {
         title: app.getName(),
         width: 800,
         height: 600,
-        frame: false
+        frame: false,
+        show: false,
     });
 
     mainWindow.loadURL(url.format({
@@ -32,6 +35,10 @@ function createWindow() {
     debug.init(mainWindow);
     oauth.init(mainWindow);
     cookies.init();
+    
+    mainWindow.on('ready-to-show', function () {
+        mainWindow.show();
+    });
     
     mainWindow.on('closed', function () {
         mainWindow = null;

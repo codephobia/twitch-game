@@ -17,6 +17,10 @@ type Config struct {
     
     ApiHost string `json:"api_host"`
     ApiPort string `json:"api_port"`
+    
+    WebApiHost        string `json:"web_api_host"`
+    WebApiPort        string `json:"web_api_port"`
+    WebApiAccessToken string `json:"web_api_access_token"`
 }
 
 // create new config

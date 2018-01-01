@@ -47,6 +47,12 @@
             "permission": "DENY"
         },
         {
+            "accessType": "*",
+            "principalType": "ROLE",
+            "principalId": "$lobbyServer",
+            "permission": "ALLOW"
+        },
+        {
             "accessType": "READ",
             "principalType": "ROLE",
             "principalId": "$authenticated",

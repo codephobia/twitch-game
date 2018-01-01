@@ -7,6 +7,7 @@ type LobbyPromoteEvent struct {
 
     *LobbyEvent
     LobbyEventLeader
+    LobbyEventBroadcastable
 }
 
 // promote event data

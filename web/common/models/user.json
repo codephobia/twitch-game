@@ -32,7 +32,12 @@
 			"options": {
 				"disableInclude": true
 			}
-		}
+		},
+        "avatar": {
+            "type": "hasOne",
+            "model": "avatar",
+            "foreignKey": "avatarId"
+        }
 	},
 	"acls": [
 	],

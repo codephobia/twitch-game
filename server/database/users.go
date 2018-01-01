@@ -8,9 +8,14 @@ import (
 
 type User struct {
     Username string `bson:"username"`
+    Avatar *Avatar
 }
 
-// get followers
+type Avatar struct {
+    Shape string `bson:"shape"`
+}
+
+// get user by user id
 func (db *Database) GetUserById(userID string) (*User, error) {
     users := make([]*User, 0)
 
@@ -36,6 +41,47 @@ func (db *Database) GetUserById(userID string) (*User, error) {
         return nil, fmt.Errorf("unable to find user by id: %s", userID)
     }
     
+    // get first result as user
+    user := users[0]
+    
+    // get avatar of user
+    avatar, err := db.GetUserAvatar(userID)
+    if err != nil {
+        return nil, fmt.Errorf("avatar: %s", err)
+    }
+    
+    // add avatar to user
+    user.Avatar = avatar
+    
     // return user
-    return users[0], nil
+    return user, nil
+}
+
+// get avatar by user id
+func (db *Database) GetUserAvatar(userID string) (*Avatar, error) {
+    avatars := make([]*Avatar, 0)
+    
+    // build query
+    query := db.avatars.Find(bson.M{
+        "userId": bson.ObjectIdHex(userID),
+    })
+    
+    // add filters
+    query.Limit(1).Select(bson.M{
+        "_id": 0,
+        "shape": 1,
+    })
+    
+    // get avatars
+    err := query.All(&avatars)
+    if err != nil {
+        return nil, fmt.Errorf("unable to get avatar by user id [%s]: %s", userID, err)
+    }
+    
+    // check if we found a user
+    if len(avatars) == 0 {
+        return nil, fmt.Errorf("unable to find avatar by user id: %s", userID)
+    }
+    
+    return avatars[0], nil
 }

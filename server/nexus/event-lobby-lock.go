@@ -10,6 +10,7 @@ type LobbyLockEvent struct {
 
     *LobbyEvent
     LobbyEventLeader
+    LobbyEventBroadcastable
 }
 
 // locked event data

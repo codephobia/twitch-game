@@ -1,5 +1,5 @@
 angular.module('app.services')
-.service('LoginService', ['$state', '$cookieStore', 'User', 'LoopBackAuth', function ($state, $cookies, User, LoopBackAuth) {
+.service('LoginService', ['$rootScope', '$state', '$cookieStore', 'User', 'Avatar', 'LoopBackAuth', 'UserService', function ($rootScope, $state, $cookies, User, Avatar, LoopBackAuth, UserService) {
     const ipcRenderer = require('electron').ipcRenderer;
     
     // open login window
@@ -17,13 +17,45 @@ angular.module('app.services')
         LoopBackAuth.setUser(authInfo.accessToken, authInfo.userId);
         LoopBackAuth.save();
         
-        User.getCurrent()
-        .$promise
-        .then(function (user) {
+        async.waterfall([
+            function (waterfallCb) {
+                User.getCurrent()
+                .$promise
+                .then(function (user) {
+                    return waterfallCb(null, user.id);
+                })
+                .catch(function (err) {
+                    return waterfallCb(err);
+                });
+            },
+            function (userId, waterfallCb) {
+                Avatar.findOne({
+                    filter: {
+                        where: {
+                            userId: userId
+                        },
+                        fields: ['shape']
+                    }
+                })
+                .$promise
+                .then(function (avatar) {
+                    return waterfallCb(null, avatar);
+                })
+                .catch(function (err) {
+                    return waterfallCb(err);
+                });
+            }
+        ], function (err, avatar) {
+            if (err) {
+                clearUserLoopBack();
+                return;
+            }
+            
+            // save avatar
+            UserService.setAvatar(avatar);
+            
+            // go to games home
             $state.go('app.games.home');
-        })
-        .catch(function (err) {
-            clearUserLoopBack();
         });
     }
     
@@ -41,6 +73,8 @@ angular.module('app.services')
     
     // logout user
     function logout() {
+        $rootScope.$emit('APP_LOGOUT');
+        
         User.logout(function () {
             $state.go('app.login');
         });

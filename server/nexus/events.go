@@ -10,6 +10,7 @@ type LobbyEventProvider interface {
     Event() *LobbyEvent
     LeaderOnly() bool
     Execute()
+    IsBroadcastable() bool
 }
 
 // event
@@ -48,6 +49,10 @@ func (l *Lobby) ValidateEvent(p *Player, e []byte) (LobbyEventProvider, error) {
             lobbyEventProvider = &LobbyKickEvent{Lobby: l, LobbyEvent: lobbyEvent}
         case "LOBBY_PROMOTE":
             lobbyEventProvider = &LobbyPromoteEvent{Lobby: l, Player: p, LobbyEvent: lobbyEvent}
+        case "LOBBY_GAME_START":
+            lobbyEventProvider = &LobbyGameStartEvent{Lobby: l, LobbyEvent: lobbyEvent}
+        case "GAME_DRAW":
+            lobbyEventProvider = &LobbyGameDrawEvent{Lobby: l, Player: p, LobbyEvent: lobbyEvent}
         default:
             return nil, fmt.Errorf("invalid event: %s", lobbyEvent.Name)
     }
@@ -92,3 +97,14 @@ func (l *LobbyEventPleb) LeaderOnly() bool {
     return false
 }
 
+// event broadcastable
+type LobbyEventBroadcastable struct {}
+type LobbyEventNotBroadcastable struct {}
+
+func (l *LobbyEventBroadcastable) IsBroadcastable() bool {
+    return true
+}
+
+func (l *LobbyEventNotBroadcastable) IsBroadcastable() bool {
+    return false
+}

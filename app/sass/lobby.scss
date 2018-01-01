@@ -1,6 +1,7 @@
 @import 'partials/colors';
 @import 'partials/inputs';
 @import 'partials/menus';
+@import 'partials/avatars';
 
 .lobbies {
     
@@ -84,6 +85,11 @@
         
         .lobby-settings {
             margin: 0px 20px 20px;
+            text-align: center;
+            
+            md-checkbox {
+                @extend .app-checkbox;
+            }
         }
         
         .lobby-submit {
@@ -176,10 +182,6 @@
                     list-style: none;
                     opacity: 0.3;
                     
-                    &.slot-filled {
-                        opacity: 1;
-                    }
-                    
                     &:nth-child(8n) {
                         margin-right: 0px;
                     }
@@ -199,21 +201,20 @@
                         
                         .player-avatar-wrapper {
                             position: relative;
+                            display: inline-block;
                             text-align: center;
+                            width: 60px;
+                            height: 100px;
 
                             .player-avatar {
-                                display: inline-block;
-                                width: 60px;
-                                height: 60px;
-                                border-radius: 50%;
-                                border: 2px solid white;
+                                position: absolute;
                             }
 
                             .locked {
                                 position: absolute;
                                 top: 50%;
                                 left: 50%;
-                                margin-top: -13px;
+                                margin-top: -10px;
                                 margin-left: -10px;
                                 width: 20px;
                                 height: 20px;
@@ -232,7 +233,109 @@
                             text-transform: uppercase;
                         }
                     }
-                }
+                    
+                    &:not(.slot-filled) {
+                        .player-wrapper {
+                            .player-avatar-wrapper {
+                                border: 2px solid white;
+                                border-radius: 50%;
+                                margin: 34px 0px 6px;
+                                height: 60px;
+                                
+                                &.purple {
+                                    border-color: $avatarPurple;
+                                    
+                                    .locked {
+                                        color: $avatarPurple;
+                                    }
+                                }
+                                
+                                &.blue {
+                                    border-color: $avatarBlue;
+
+                                    .locked {
+                                        color: $avatarBlue;
+                                    }
+                                }
+                                
+                                &.pink {
+                                    border-color: $avatarPink;
+                                    
+                                    .locked {
+                                        color: $avatarPink;
+                                    }
+                                }
+                                
+                                &.orange {
+                                    border-color: $avatarOrange;
+                                    
+                                    .locked {
+                                        color: $avatarOrange;
+                                    }
+                                }
+                                
+                                &.green {
+                                    border-color: $avatarGreen;
+                                    
+                                    .locked {
+                                        color: $avatarGreen;
+                                    }
+                                }
+                                
+                                &.brown {
+                                    border-color: $avatarBrown;
+                                    
+                                    .locked {
+                                        color: $avatarBrown;
+                                    }
+                                }
+                                
+                                &.yellow {
+                                    border-color: $avatarYellow;
+                                    
+                                    .locked {
+                                        color: $avatarYellow;
+                                    }
+                                }
+                                
+                                &.red {
+                                    border-color: $avatarRed;
+                                    
+                                    .locked {
+                                        color: $avatarRed;
+                                    }
+                                }
+                                
+                                .player-avatar {
+                                    top: 34px;
+                                    left: 0px;
+                                    width: 60px;
+                                    height: 60px;
+                                }
+                            }
+                        }
+                    }
+                    
+                    &.slot-filled {
+                        opacity: 1;
+                        
+                        .player-wrapper {
+                            .player-avatar-wrapper {
+                                .player-avatar {
+                                    position: absolute;
+                                    top: 0px;
+                                    left: -34px;
+                                    width: 128px;
+                                    height: 128px;
+
+                                    @extend .app-avatar;
+                                }
+                            }
+                        }
+                    }/* &.slot-filled */
+                    
+
+                }/* .player-slot */
             }
         }
         
@@ -262,28 +365,10 @@
             .search {
                 @extend .app-input;
                 @extend .app-input-sm;
+                @extend .app-input-search;
                 
                 input {
                     padding-right: 25px;
-                }
-                
-                &:after {
-                    position: absolute;
-                    top: 11px;
-                    right: 10px;
-                    font-family: "FontAwesome";
-                    content: "\f002";
-                    color: rgba(255,255,255,.3);
-                    pointer-events: none;
-                    transition: color .2s ease-in;
-                }
-
-                &:hover,
-                &.md-input-focused,
-                &.md-input-has-value {
-                    &:after {
-                        color: rgba(255,255,255,.8);
-                    }
                 }
             }
         }

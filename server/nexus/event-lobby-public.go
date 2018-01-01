@@ -10,6 +10,7 @@ type LobbyPublicEvent struct {
 
     *LobbyEvent
     LobbyEventLeader
+    LobbyEventBroadcastable
 }
 
 // public event data

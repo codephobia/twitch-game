@@ -10,7 +10,7 @@
         <md-menu class="app-no-drag" md-offset="0 -80">
             <button class="profile" ng-click="openMenu($mdMenu, $event)">
                 <div class="username">{{username() | username}}</div>
-                <div class="avatar"></div>
+                <div class="avatar {{avatar().shape}} purple"></div>
             </button>
             <md-menu-content class="profile-menu-content">
                 <md-menu-item>

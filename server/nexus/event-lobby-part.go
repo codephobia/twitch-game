@@ -7,11 +7,39 @@ type LobbyPartEvent struct {
 
     *LobbyEvent
     LobbyEventPleb
+    LobbyEventNotBroadcastable
 }
 
 // part event data
 type LobbyPartData struct {
     UserID string `json:"userId"`
+}
+
+// create new lobby part event
+func (l *Lobby) NewLobbyPartEvent(p *Player) ([]byte, error) {
+    // create event
+    event := &LobbyPartEvent{
+        Lobby: l,
+        Player: p,
+        LobbyEvent: &LobbyEvent{
+            Name: "LOBBY_PART",
+            Data: &LobbyPartData{
+                UserID: p.ID,
+            },
+        },
+    }
+    
+    // execute the event
+    event.Execute()
+    
+    // generate message
+    message, err := event.Event().Generate()
+    if err != nil {
+        return nil, err
+    }
+    
+    // return event string
+    return message, nil
 }
 
 // execute player part
@@ -28,7 +56,5 @@ func (e *LobbyPartEvent) Execute() {
     e.Event().Data = &LobbyPartData{
         UserID: e.Player.ID,
     }
-    
-    // close player connection
-    e.Lobby.PlayerClose(e.Player)
 }
+

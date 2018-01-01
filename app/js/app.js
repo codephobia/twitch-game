@@ -4,6 +4,8 @@ var app = angular.module('app', [
     'ngMaterial',
     'ngResource',
     'ngCookies',
+    'ls.LiveSet',
+    'ls.ChangeStream',
     'lbServices',
     'app.controllers',
     'app.services',
@@ -151,7 +153,7 @@ var app = angular.module('app', [
                 }
             },
             resolve: {
-                games: ['Game', function (Game) {
+                dataGames: ['Game', function (Game) {
                     return Game.find({
                         filter: {
                             where: {},
@@ -159,8 +161,8 @@ var app = angular.module('app', [
                         }
                     }).$promise;
                 }],
-                lobbies: ['Lobby', function (Lobby) {
-                    return Lobby.find({
+                queryLobbies: [function () {
+                    return {
                         filter: {
                             where: {
                                 public: true,
@@ -175,7 +177,10 @@ var app = angular.module('app', [
                                 }
                             ]
                         }
-                    }).$promise;
+                    };
+                }],
+                dataLobbies: ['Lobby', 'queryLobbies', function (Lobby, queryLobbies) {
+                    return Lobby.find(queryLobbies).$promise;
                 }]
             }
         })
@@ -185,6 +190,15 @@ var app = angular.module('app', [
                 lobby: {
                     templateUrl: 'lobby/lobbies.lobby.html',
                     controller: 'LobbyCtrl'
+                }
+            }
+        })
+        .state('app.games.test', {
+            url: '/test',
+            views: {
+                games: {
+                    templateUrl: 'games/test.html',
+                    controller: 'TestCtrl'
                 }
             }
         });

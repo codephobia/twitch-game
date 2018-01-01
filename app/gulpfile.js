@@ -48,7 +48,8 @@ gulp.task('sass:concat', function () {
 gulp.task('css:vendor:build', function () {
     gulp.src([
         paths.vendor + 'font-awesome/css/font-awesome.css',
-        paths.vendor + 'angular-material/angular-material.css'
+        paths.vendor + 'angular-material/angular-material.css',
+        paths.vendor + 'utatti-perfect-scrollbar/css/perfect-scrollbar.css'
     ]).pipe(gulp.dest(paths.build + 'css/vendor'));
 });
 
@@ -164,6 +165,7 @@ gulp.task('js:vendor:build', function () {
         paths.vendor + 'angular-ui-router/release/angular-ui-router.js',
         paths.vendor + 'angular-resource/angular-resource.js',
         paths.vendor + 'angular-cookies/angular-cookies.js',
+        paths.vendor + 'angular-live-set/dist/live-set.js',
     ]).pipe(gulp.dest(paths.build + 'js/vendor'));
 });
 
@@ -178,6 +180,7 @@ gulp.task('js:vendor:concat', function () {
         paths.build + 'js/vendor/angular-ui-router.js',
         paths.build + 'js/vendor/angular-resource.js',
         paths.build + 'js/vendor/angular-cookies.js',
+        paths.build + 'js/vendor/live-set.js',
     ])
     .pipe(concat('vendor.js'))
     .pipe(gulp.dest(paths.dist + 'js'));

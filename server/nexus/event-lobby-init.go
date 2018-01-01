@@ -6,6 +6,7 @@ type LobbyInitEvent struct {
     
     *LobbyEvent
     LobbyEventApp
+    LobbyEventNotBroadcastable
 }
 
 // lobby init data

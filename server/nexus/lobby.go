@@ -32,16 +32,18 @@ type Game struct {
     Name     string `json:"name"`
     SlotsMin int    `json:"slotsMin"`
     SlotsMax int    `json:"slotsMax"`
+    Started  bool   `json:"started"`
 }
 
 // create new lobby
 func NewLobby(db *database.Database, nexus *Nexus, lobbyID string, lobbyName string, lobbyCode string, public bool, userID string, gameID string, gameName string, gameSlotsMin int, gameSlotsMax int) *Lobby {
     // create game
     game := &Game{
-        ID: gameID,
-        Name: gameName,
+        ID:       gameID,
+        Name:     gameName,
         SlotsMin: gameSlotsMin,
         SlotsMax: gameSlotsMax,
+        Started:  false,
     }
     
     // return new lobby
@@ -102,7 +104,6 @@ func (l *Lobby) RegisterPlayer(player *Player) {
     // send event to player
     player.Send <- initEvent
     
-    
     // create join event for existing players
     joinEvent, err := l.NewLobbyJoinEvent(player)
     if err != nil {
@@ -122,13 +123,30 @@ func (l *Lobby) RegisterPlayer(player *Player) {
 
 // unregister a player with lobby
 func (l *Lobby) UnregisterPlayer(player *Player) {
+    // check if player was kicked
+    // otherwise send a part event
+    if !player.Kicked {
+        // create part event for closed connection
+        partEvent, err := l.NewLobbyPartEvent(player)
+        if err != nil {
+            log.Printf("[ERROR] new lobby part event: %s", err)
+        } else {
+            // broadcast part event
+            l.SendPlayersExcept(player, partEvent)
+        }
+    }
+
+    // close player connection
     if _, ok := l.Players[player]; ok {
         l.PlayerClose(player)
-    }    
+    }
 
-    // update number of players on database
-    if err := l.database.UpdateLobbyPlayers(l.ID, len(l.Players)); err != nil {
-        log.Printf("[ERROR] lobby update players: ", err)
+    // check if there are other players still in the lobby
+    if len(l.Players) > 0 {
+        // update number of players on database
+        if err := l.database.UpdateLobbyPlayers(l.ID, len(l.Players)); err != nil {
+            log.Printf("[ERROR] lobby update players: ", err)
+        }
     }
 }
 
@@ -172,8 +190,6 @@ func (l *Lobby) GetPlayerByID(userID string) (*Player, error) {
 
 // close a player connection on the lobby
 func (l *Lobby) PlayerClose(player *Player) {
-    log.Printf("[INFO] closing player: %+v", player)
-    
     // close player connection
     close(player.Send)
 
@@ -215,6 +231,12 @@ type LobbyPlayer struct {
     IsLeader bool   `json:"isLeader"`
     UserID   string `json:"userId"`
     JoinTime int64  `json:"joinTime"`
+
+    Avatar *LobbyPlayerAvatar `json:"avatar"`
+}
+
+type LobbyPlayerAvatar struct {
+    Shape string `json:"shape"`
 }
 
 // get all players data in the lobby
@@ -224,6 +246,9 @@ func (l *Lobby) GetPlayersData() []*LobbyPlayer {
     for player, _ := range l.Players {
         players = append(players, &LobbyPlayer{
             Username: player.Username,
+            Avatar: &LobbyPlayerAvatar{
+                Shape: player.Avatar.Shape,
+            },
             IsLeader: l.LeaderID == player.ID,
             UserID:   player.ID,
             JoinTime: player.JoinTime.Unix(),

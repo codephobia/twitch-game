@@ -4,7 +4,7 @@ angular.module('app.directives')
         restrict: 'E',
         replace: true,
         templateUrl: './directives/toolbar-top.html',
-        controller: ['$scope', function ($scope) {
+        controller: ['$rootScope', '$scope', 'User', function ($rootScope, $scope, User) {
             const remote = require('electron').remote;
             
             // scope
@@ -12,6 +12,8 @@ angular.module('app.directives')
             $scope.isMaximized = isMaximized;
             $scope.toggleMaximize = toggleMaximize;
             $scope.close = close;
+            $scope.friendsOpen = friendsOpen;
+            $scope.isLoggedIn = isLoggedIn;
             
             // mimimize
             function minimize() {
@@ -40,6 +42,17 @@ angular.module('app.directives')
                 var window = remote.getCurrentWindow();
                 window.close();
             }
+            
+            // return if user is logged in
+            function isLoggedIn() {
+                return User.isAuthenticated();
+            }
+            
+            // open friends list
+            function friendsOpen() {
+                $rootScope.$emit('FRIENDS_LIST_TOGGLE');
+            }
+            
         }]
     };
 });

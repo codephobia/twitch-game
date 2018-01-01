@@ -1,5 +1,9 @@
 @import 'colors';
 
+$buttonBackground: rgba(white, .1);
+$buttonBackgroundActive: rgba(white, .4);
+$buttonBackgroundDisabled: rgba(white, .1);
+
 /* buttons */
 .btn {
     position: relative;
@@ -9,7 +13,7 @@
     line-height: 20px;
     text-transform: capitalize;
     border: 2px solid rgba(255,255,255,.3);
-    background: rgba(white, .1);
+    background: $buttonBackground;
     width: 300px;
     opacity: 1;
 
@@ -19,7 +23,7 @@
     &:hover,
     &:focus {
         border: 2px solid rgba(white,.8);
-        background: rgba(white, .4);
+        background: $buttonBackgroundActive;
     }
     
     .loading {
@@ -36,7 +40,7 @@
         &:hover,
         &:focus {
             border: 2px solid rgba(255,255,255,.3);
-            background: rgba(white, .1);
+            background: $buttonBackgroundDisabled;
         }
     }
 }

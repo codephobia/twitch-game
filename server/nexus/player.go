@@ -21,11 +21,18 @@ type Player struct {
     
     ID       string
     Username string
+    Avatar   *Avatar
     JoinTime time.Time
     
+    Kicked bool
+
     Lobby    *Lobby
     conn     *websocket.Conn
     Send     chan []byte
+}
+
+type Avatar struct {
+    Shape string
 }
 
 func NewPlayer(db *database.Database, userID string, l *Lobby, c *websocket.Conn) (*Player, error) {
@@ -41,7 +48,12 @@ func NewPlayer(db *database.Database, userID string, l *Lobby, c *websocket.Conn
         
         ID:       userID,
         Username: user.Username,
+        Avatar: &Avatar{
+            Shape: user.Avatar.Shape,
+        },
         JoinTime: time.Now(),
+        
+        Kicked: false,
         
         Lobby: l,
         conn:  c,
@@ -65,9 +77,6 @@ func (p *Player) ReadPump() {
             if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
                 log.Printf("[ERROR] unexpected close error: %s", err)
             }
-            
-            // TODO: HANDLE UNEXPECTED LEAVE
-            
             break
         }
         
@@ -81,15 +90,18 @@ func (p *Player) ReadPump() {
         // execute the event
         event.Execute()
         
-        // generate message to broadcast
-        eventMessage, err := event.Event().Generate()
-        if err != nil {
-            log.Printf("[ERROR] read event: %s", err)
-            continue
+        // check if event is broadcastable
+        if event.IsBroadcastable() {
+            // generate message to broadcast
+            eventMessage, err := event.Event().Generate()
+            if err != nil {
+                log.Printf("[ERROR] read event: %s", err)
+                continue
+            }
+
+            // broadcast message
+            p.Lobby.Broadcast <- eventMessage
         }
-        
-        // broadcast message
-        p.Lobby.Broadcast <- eventMessage
     }
 }
 
@@ -111,6 +123,7 @@ func (p *Player) WritePump() {
         case message, ok := <-p.Send:
             p.conn.SetWriteDeadline(time.Now().Add(writeWait))
             if !ok {
+                // close connection
                 p.conn.WriteMessage(websocket.CloseMessage, []byte{})
                 return
             }
@@ -119,12 +132,8 @@ func (p *Player) WritePump() {
             if err != nil {
                 return
             }
-            w.Write(message)
             
-            n := len(p.Send)
-            for i := 0; i < n; i++ {
-                w.Write(<-p.Send)
-            }
+            w.Write(message)
             
             if err := w.Close(); err != nil {
                 return

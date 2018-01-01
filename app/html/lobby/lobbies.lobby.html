@@ -24,16 +24,16 @@
         </div>
         <div class="player-slots-wrapper" layout="row" layout-align="center start">
             <ul class="player-slots" layout="row" layout-align="stretch start" flex>
-                <li class="player-slot" ng-repeat="slot in lobby.getSlots() track by $index" layout="column" layout-align="center center" flex ng-class="{ 'slot-filled': lobby.getPlayer($index) }">
+                <li class="player-slot" ng-repeat="slot in lobby.getSlots() | orderBy track by $index" layout="column" layout-align="center center" flex ng-class="{ 'slot-filled': lobby.getPlayer($index) }">
                     <div class="player-leader" ng-class="{ 'is-leader': lobby.getPlayer($index).isLeader }"></div>
 
                     <md-menu mousepoint-menu>
                         <div class="player-wrapper" ng-click="" app-context-menu="!!lobby.getPlayer($index) && lobby.getCurrentPlayer().userId !== lobby.getPlayer($index).userId && $mdOpenMousepointMenu($event)">
-                            <div class="player-avatar-wrapper">
+                            <div class="player-avatar-wrapper {{lobby.getPlayerColorByIndex($index)}}">
                                 <div class="locked" ng-if="lobby.isLocked() && !lobby.getPlayer($index)">
                                     <i class="fa fa-lock"></i>
                                 </div>
-                                <div class="player-avatar"></div>
+                                <div class="player-avatar {{lobby.getPlayerAvatarShape($index)}} {{lobby.getPlayerColorByIndex($index)}}"></div>
                             </div>
                             <div class="player-username">
                                 <span ng-if="lobby.getPlayer($index).username">{{lobby.getPlayer($index).username | username}}</span>
@@ -68,7 +68,7 @@
             </button>
         </div>
         <div class="lobby-submit">
-            <button class="btn" ng-disabled="!lobby.canStart()" ng-if="lobby.playerIsLeader()">Start Game</button>
+            <button class="btn" ng-disabled="!lobby.canStart()" ng-if="lobby.playerIsLeader()" ng-click="lobby.gameStart()">Start Game</button>
         </div>
     </div>
 </div>
