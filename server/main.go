@@ -18,14 +18,15 @@ type Main struct {
 
 func main() {
 	// make a new main
-	_, err := NewMain()
+	_, err := newMain()
 
 	if err != nil {
 		log.Fatalf("[ERROR] main: %s", err)
 	}
 }
 
-func NewMain() (*Main, error) {
+// generate a new main
+func newMain() (*Main, error) {
 	// load config
 	c := config.NewConfig()
 	if err := c.Load(); err != nil {

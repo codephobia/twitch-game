@@ -52,7 +52,7 @@ func (api *API) Init() error {
 	}
 
 	// create a listener
-	hostURL := strings.Join([]string{api.config.ApiHost, ":", api.config.ApiPort}, "")
+	hostURL := strings.Join([]string{api.config.APIHost, ":", api.config.APIPort}, "")
 	listener, err := net.Listen("tcp", hostURL)
 	if err != nil {
 		return fmt.Errorf("error starting api server: %s", err)
