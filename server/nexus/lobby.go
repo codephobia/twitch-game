@@ -69,7 +69,7 @@ func NewLobby(db *database.Database, nexus *Nexus, lobbyID string, lobbyName str
 	}
 }
 
-// Run starts a Lobby. Should be run in a seperate thread.
+// Run starts a Lobby. Should be run in a separate thread.
 func (l *Lobby) Run() {
 	for {
 		select {

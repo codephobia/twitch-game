@@ -9,7 +9,7 @@ type LobbyInitEvent struct {
 	LobbyEventNotBroadcastable
 }
 
-// LobbyInitData contains the inital state of the lobby on join.
+// LobbyInitData contains the initial state of the lobby on join.
 type LobbyInitData struct {
 	LobbyName string         `json:"lobbyName"`
 	LobbyCode string         `json:"lobbyCode"`
