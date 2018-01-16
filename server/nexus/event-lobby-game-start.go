@@ -1,16 +1,16 @@
 package nexus
 
-// game start event
+// LobbyGameStartEvent is an event for starting a game.
 type LobbyGameStartEvent struct {
-    Lobby  *Lobby
+	Lobby *Lobby
 
-    *LobbyEvent
-    LobbyEventLeader
-    LobbyEventBroadcastable
+	*LobbyEvent
+	LobbyEventLeader
+	LobbyEventBroadcastable
 }
 
-// execute game start event
+// Execute runs the GameLobbyStartEvent.
 func (e *LobbyGameStartEvent) Execute() {
-    // set game to started
-    e.Lobby.Game.Started = true
+	// set game to started
+	e.Lobby.Game.Started = true
 }

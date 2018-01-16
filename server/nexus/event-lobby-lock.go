@@ -1,36 +1,36 @@
 package nexus
 
 import (
-    "log"
+	"log"
 )
 
-// lock event
+// LobbyLockEvent announces when the locked state of the lobby changes.
 type LobbyLockEvent struct {
-    Lobby  *Lobby
+	Lobby *Lobby
 
-    *LobbyEvent
-    LobbyEventLeader
-    LobbyEventBroadcastable
+	*LobbyEvent
+	LobbyEventLeader
+	LobbyEventBroadcastable
 }
 
-// locked event data
+// LobbyLockData contains the locked state of the lobby.
 type LobbyLockData struct {
-    Locked bool `json:"locked"`
+	Locked bool `json:"locked"`
 }
 
-// execute lock event
+// Execute runs the LobbyLockEvent.
 func (e *LobbyLockEvent) Execute() {
-    // toggle lobby lock
-    e.Lobby.Locked = !e.Lobby.Locked
-    
-    // update event data to reflect locked state
-    e.Event().Data = &LobbyLockData{
-        Locked: e.Lobby.Locked,
-    }
-    
-    // update lobby locked on database
-    err := e.Lobby.database.UpdateLobbyLocked(e.Lobby.ID, e.Lobby.Locked)
-    if err != nil {
-        log.Printf("[ERROR] lobby lock event: ", err)
-    }
+	// toggle lobby lock
+	e.Lobby.Locked = !e.Lobby.Locked
+
+	// update event data to reflect locked state
+	e.Event().Data = &LobbyLockData{
+		Locked: e.Lobby.Locked,
+	}
+
+	// update lobby locked on database
+	err := e.Lobby.database.UpdateLobbyLocked(e.Lobby.ID, e.Lobby.Locked)
+	if err != nil {
+		log.Printf("[ERROR] lobby lock event: %s", err)
+	}
 }

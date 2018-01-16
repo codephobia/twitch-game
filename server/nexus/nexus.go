@@ -1,46 +1,48 @@
 package nexus
 
 import (
-    "fmt"
-    
-    database "github.com/codephobia/twitch-game/server/database"
+	"fmt"
+
+	database "github.com/codephobia/twitch-game/server/database"
 )
 
+// Nexus contains all of the lobbies.
 type Nexus struct {
-    database *database.Database
-    
-    Lobbies map[string]*Lobby
+	database *database.Database
+
+	Lobbies map[string]*Lobby
 }
 
-// create a new nexus
+// NewNexus returns a new Nexus.
 func NewNexus(db *database.Database) *Nexus {
-    return &Nexus{
-        database: db,
-        
-        Lobbies: make(map[string]*Lobby, 0),
-    }
+	return &Nexus{
+		database: db,
+
+		Lobbies: make(map[string]*Lobby, 0),
+	}
 }
 
-// init a new lobby in the nexus
+// InitNewLobby initializes a new lobby in the nexus.
 func (n *Nexus) InitNewLobby(lobbyID string, lobbyName string, lobbyCode string, public bool, userID string, gameID string, gameName string, gameSlotsMin int, gameSlotsMax int) {
-    n.Lobbies[lobbyID] = NewLobby(n.database, n, lobbyID, lobbyName, lobbyCode, public, userID, gameID, gameName, gameSlotsMin, gameSlotsMax)
-    go n.Lobbies[lobbyID].Run()
+	n.Lobbies[lobbyID] = NewLobby(n.database, n, lobbyID, lobbyName, lobbyCode, public, userID, gameID, gameName, gameSlotsMin, gameSlotsMax)
+	go n.Lobbies[lobbyID].Run()
 }
 
-// find a lobby in the nexus by id
+// FindLobbyByID returns a lobby in the nexus by id.
 func (n *Nexus) FindLobbyByID(lobbyID string) (*Lobby, error) {
-    if lobby, ok := n.Lobbies[lobbyID]; !ok {
-        return nil, fmt.Errorf("unable to find lobby id: %s", lobbyID)
-    } else {
-        return lobby, nil
-    }
+	lobby, ok := n.Lobbies[lobbyID]
+	if !ok {
+		return nil, fmt.Errorf("unable to find lobby id: %s", lobbyID)
+	}
+
+	return lobby, nil
 }
 
-// close a lobby in the nexus
+// LobbyClose closes a lobby in the nexus.
 func (n *Nexus) LobbyClose(l *Lobby) {
-    // remove lobby from database
-    n.database.RemoveLobby(l.ID)
-    
-    // remove lobby from nexus
-    delete(n.Lobbies, l.ID)
+	// remove lobby from database
+	n.database.RemoveLobby(l.ID)
+
+	// remove lobby from nexus
+	delete(n.Lobbies, l.ID)
 }

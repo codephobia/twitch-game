@@ -1,36 +1,36 @@
 package nexus
 
 import (
-    "log"
+	"log"
 )
 
-// public event
+// LobbyPublicEvent changes the public state of the lobby.
 type LobbyPublicEvent struct {
-    Lobby  *Lobby
+	Lobby *Lobby
 
-    *LobbyEvent
-    LobbyEventLeader
-    LobbyEventBroadcastable
+	*LobbyEvent
+	LobbyEventLeader
+	LobbyEventBroadcastable
 }
 
-// public event data
+// LobbyPublicData contains the public state of the lobby.
 type LobbyPublicData struct {
-    Public bool `json:"public"`
+	Public bool `json:"public"`
 }
 
-// execute public event
+// Execute runs the LobbyPublicEvent.
 func (e *LobbyPublicEvent) Execute() {
-    // toggle lobby public
-    e.Lobby.Public = !e.Lobby.Public
-    
-    // update event data to reflect public state
-    e.Event().Data = &LobbyPublicData{
-        Public: e.Lobby.Public,
-    }
-    
-    // update lobby public on database
-    err := e.Lobby.database.UpdateLobbyPublic(e.Lobby.ID, e.Lobby.Public)
-    if err != nil {
-        log.Printf("[ERROR] lobby public event: ", err)
-    }
+	// toggle lobby public
+	e.Lobby.Public = !e.Lobby.Public
+
+	// update event data to reflect public state
+	e.Event().Data = &LobbyPublicData{
+		Public: e.Lobby.Public,
+	}
+
+	// update lobby public on database
+	err := e.Lobby.database.UpdateLobbyPublic(e.Lobby.ID, e.Lobby.Public)
+	if err != nil {
+		log.Printf("[ERROR] lobby public event: %s", err)
+	}
 }
