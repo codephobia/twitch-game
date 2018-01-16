@@ -9,7 +9,7 @@ import (
 	nexus "github.com/codephobia/twitch-game/server/nexus"
 )
 
-type Main struct {
+type root struct {
 	config   *config.Config
 	database *database.Database
 	nexus    *nexus.Nexus
@@ -18,7 +18,7 @@ type Main struct {
 
 func main() {
 	// make a new main
-	_, err := newMain()
+	_, err := newRoot()
 
 	if err != nil {
 		log.Fatalf("[ERROR] main: %s", err)
@@ -26,7 +26,7 @@ func main() {
 }
 
 // generate a new main
-func newMain() (*Main, error) {
+func newRoot() (*root, error) {
 	// load config
 	c := config.NewConfig()
 	if err := c.Load(); err != nil {
@@ -49,7 +49,7 @@ func newMain() (*Main, error) {
 	}
 
 	// return main
-	return &Main{
+	return &root{
 		config:   c,
 		database: db,
 		nexus:    nexus,
