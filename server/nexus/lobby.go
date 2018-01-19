@@ -3,6 +3,7 @@ package nexus
 import (
 	"fmt"
 	"log"
+	"sync"
 
 	database "github.com/codephobia/twitch-game/server/database"
 )
@@ -26,6 +27,8 @@ type Lobby struct {
 	Broadcast  chan []byte
 	Register   chan *Player
 	Unregister chan *Player
+
+	*sync.Mutex
 }
 
 // Game stores information about the selected game for the lobby.
@@ -66,6 +69,8 @@ func NewLobby(db *database.Database, nexus *Nexus, lobbyID string, lobbyName str
 		Broadcast:  make(chan []byte),
 		Register:   make(chan *Player),
 		Unregister: make(chan *Player),
+
+		Mutex: &sync.Mutex{},
 	}
 }
 
@@ -90,6 +95,10 @@ func (l *Lobby) Run() {
 
 // RegisterPlayer registers a player with the lobby.
 func (l *Lobby) RegisterPlayer(player *Player) {
+	// lock lobby
+	l.Lock()
+	defer l.Unlock()
+
 	l.Players[player] = true
 
 	// send new player lobby state
@@ -125,6 +134,10 @@ func (l *Lobby) RegisterPlayer(player *Player) {
 
 // UnregisterPlayer unregisters a player with lobby.
 func (l *Lobby) UnregisterPlayer(player *Player) {
+	// lock lobby
+	l.Lock()
+	defer l.Unlock()
+
 	// check if player was kicked
 	// otherwise send a part event
 	if !player.Kicked {
@@ -139,9 +152,7 @@ func (l *Lobby) UnregisterPlayer(player *Player) {
 	}
 
 	// close player connection
-	if _, ok := l.Players[player]; ok {
-		l.PlayerClose(player)
-	}
+	l.PlayerClose(player)
 
 	// check if there are other players still in the lobby
 	if len(l.Players) > 0 {
@@ -154,6 +165,9 @@ func (l *Lobby) UnregisterPlayer(player *Player) {
 
 // SendPlayers sends all players an event.
 func (l *Lobby) SendPlayers(message []byte) {
+	l.Lock()
+	defer l.Unlock()
+
 	for player := range l.Players {
 		select {
 		case player.Send <- message:
@@ -181,17 +195,29 @@ func (l *Lobby) SendPlayersExcept(p *Player, message []byte) {
 
 // GetPlayerByID returns a player in lobby by id.
 func (l *Lobby) GetPlayerByID(userID string) (*Player, error) {
+	// lock lobby
+	l.Lock()
+	defer l.Unlock()
+
+	// loop through lobby players
 	for player := range l.Players {
 		if player.ID == userID {
+			// return player
 			return player, nil
 		}
 	}
 
+	// return with error
 	return nil, fmt.Errorf("unable to find player by id: %s", userID)
 }
 
 // PlayerClose closes a player connection on the lobby.
 func (l *Lobby) PlayerClose(player *Player) {
+	// make sure the player still exists on the lobby
+	if _, ok := l.Players[player]; !ok {
+		return
+	}
+
 	// close player connection
 	close(player.Send)
 
@@ -206,6 +232,10 @@ func (l *Lobby) PlayerClose(player *Player) {
 
 // AssignNewLeaderExcept assigns a new player except the specified player to lobby leader.
 func (l *Lobby) AssignNewLeaderExcept(p *Player) {
+	// lock lobby
+	l.Lock()
+	defer l.Unlock()
+
 	currentLeaderID := l.LeaderID
 
 	for player := range l.Players {
@@ -246,6 +276,7 @@ type LobbyPlayerAvatar struct {
 func (l *Lobby) GetPlayersData() []*LobbyPlayer {
 	players := make([]*LobbyPlayer, 0)
 
+	// loop through lobby players
 	for player := range l.Players {
 		players = append(players, &LobbyPlayer{
 			Username: player.Username,
@@ -258,5 +289,6 @@ func (l *Lobby) GetPlayersData() []*LobbyPlayer {
 		})
 	}
 
+	// return player data
 	return players
 }

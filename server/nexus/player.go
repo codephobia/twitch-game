@@ -2,6 +2,7 @@ package nexus
 
 import (
 	"log"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -30,6 +31,8 @@ type Player struct {
 	Lobby *Lobby
 	conn  *websocket.Conn
 	Send  chan []byte
+
+	*sync.Mutex
 }
 
 // Avatar contains the player shape.
@@ -61,6 +64,8 @@ func NewPlayer(db *database.Database, userID string, l *Lobby, c *websocket.Conn
 		Lobby: l,
 		conn:  c,
 		Send:  make(chan []byte, 256),
+
+		Mutex: &sync.Mutex{},
 	}, nil
 }
 
@@ -78,7 +83,7 @@ func (p *Player) ReadPump() {
 	for {
 		_, message, err := p.conn.ReadMessage()
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
 				log.Printf("[ERROR] unexpected close error: %s", err)
 			}
 			break
@@ -149,5 +154,9 @@ func (p *Player) WritePump() {
 
 // IsLeader returns if the player is the leader of the lobby.
 func (p *Player) IsLeader() bool {
+	// lock player
+	p.Lock()
+	defer p.Unlock()
+
 	return p.ID == p.Lobby.LeaderID
 }

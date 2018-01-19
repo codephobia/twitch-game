@@ -2,7 +2,6 @@
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-const ipc = electron.ipcMain;
 
 const debug = require('./lib/debug');
 
@@ -27,7 +26,7 @@ function createWindow() {
     });
 
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, "build", "dist", "html", "index.html"),
+        pathname: path.join(__dirname, 'build', 'dist', 'html', 'index.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -48,7 +47,7 @@ function createWindow() {
     });
 }
 
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {

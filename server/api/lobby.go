@@ -125,4 +125,6 @@ func (api *API) handleLobbyJoinGet(w http.ResponseWriter, r *http.Request) {
 	// init read / write for socket connection
 	go p.WritePump()
 	go p.ReadPump()
+
+	return
 }

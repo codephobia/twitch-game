@@ -46,7 +46,7 @@ func NewAPI(c *config.Config, db *database.Database, nexus *nexus.Nexus) *API {
 func (api *API) Init() error {
 	// create the server
 	api.server = &http.Server{
-		Handler:      handlers.CompressHandler(handlers.CORS()(api.Handler())),
+		Handler:      handlers.CORS()(api.Handler()),
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}

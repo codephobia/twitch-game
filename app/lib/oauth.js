@@ -6,10 +6,10 @@ const async = require('async');
 var mainWindow = null;
 var authWindow = null;
 
-var cookieUrl = 'http://localhost/';
 var cookieDomain = 'localhost';
 var callbackUrl = 'http://localhost:3000/games';
 
+// eslint-disable-next-line no-unused-vars
 function oauthLogin(e, data) {
     authWindow = new BrowserWindow({
         title: '',
@@ -69,7 +69,7 @@ function oauthLogin(e, data) {
                     
                     // remove the cookie
                     //authWindow.webContents.session.cookies.remove(callbackUrl, cookieName, function () {
-                        return waterfallCb(null, userId);
+                    return waterfallCb(null, userId);
                     //});
                 });
             },
@@ -94,12 +94,13 @@ function oauthLogin(e, data) {
                     
                     // remove the cookie
                     //authWindow.webContents.session.cookies.remove(callbackUrl, cookieName, function () {
-                        return waterfallCb(null, userId, accessToken);
+                    return waterfallCb(null, userId, accessToken);
                     //});
                 });
             }
         ], function (err, userId, accessToken) {
             if (err) {
+                // eslint-disable-next-line no-console
                 console.error(err);
                 return;
             }

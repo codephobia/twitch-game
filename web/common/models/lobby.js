@@ -1,10 +1,11 @@
+'use strict';
+
 var async = require('async');
 var ObjectID = require('mongodb').ObjectID;
 
-module.exports = function (Lobby) {
-    
+module.exports = function(Lobby) {
     // create lobby and add to lobby server
-    Lobby.createLobby = function (req, gameId, lobbyName, public, userId, cb) {
+    Lobby.createLobby = function(req, gameId, lobbyName, isPublic, userId, cb) {
         // TODO: REMOVE USERID
         userId = userId || req.accessToken.userId.toString();
         
@@ -30,7 +31,7 @@ module.exports = function (Lobby) {
                     gameId: ObjectID(gameId),
                     name: lobbyName,
                     code: lobbyCode,
-                    public: public,
+                    public: isPublic,
                 }, function (err, data) {
                     if (err) {
                         return waterfallCb(err);
@@ -40,10 +41,11 @@ module.exports = function (Lobby) {
                 });
             },
             // create lobby on server
-            function (gameName, gameSlotsMin, gameSlotsMax, lobbyId, lobbyCode, waterfallCb) {
+            function(gameName, gameSlotsMin, gameSlotsMax, lobbyId, lobbyCode, waterfallCb) {
                 var LobbyServer = Lobby.app.models.LobbyServer;
                 
-                LobbyServer.createLobby(lobbyId, lobbyName, lobbyCode, public, userId, gameId, gameName, gameSlotsMin, gameSlotsMax, function (err, data) {
+                // eslint-disable-next-line no-unused-vars
+                LobbyServer.createLobby(lobbyId, lobbyName, lobbyCode, isPublic, userId, gameId, gameName, gameSlotsMin, gameSlotsMax, function(err, data) {
                     if (err) {
                         return waterfallCb(err);
                     }
@@ -78,8 +80,8 @@ module.exports = function (Lobby) {
 };
 
 function generateLobbyCode() {
-    var code = "";
-    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var code = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var codeLength = 4;
     
     for (var i = 0; i < codeLength; i++) {

@@ -18,6 +18,8 @@
     "electron": "~1.7.8",
     "electron-debug": "^1.4.0",
     "electron-drag": "^1.2.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-loopback-sdk-angular": "^0.2.0",

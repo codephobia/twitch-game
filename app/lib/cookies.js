@@ -3,7 +3,7 @@ const session = electron.session;
 const ipc = electron.ipcMain;
 const async = require('async');
 
-function init(mainWindow) {
+function init() {
     ipc.on('get-cookie', ipcGetCookie);
     ipc.on('set-cookie', ipcSetCookie);
 }
@@ -49,6 +49,7 @@ function setCookie(name, value) {
 
     session.defaultSession.cookies.set(cookie, (err) => {
         if (err) {
+            // eslint-disable-next-line no-console
             console.error(err);
         }
         
@@ -59,7 +60,8 @@ function setCookie(name, value) {
 
 function save() {
     session.defaultSession.cookies.flushStore(function () {
-        console.log('[INFO] cookies written to disk');
+        // eslint-disable-next-line no-console
+        console.info('[INFO] cookies written to disk');
     });
 }
 

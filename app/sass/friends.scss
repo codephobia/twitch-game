@@ -61,8 +61,8 @@ $titlePadding: 10px;
             font-size: 15px;
             
             border: $inputBorder;
-            background: $buttonBackground;
-            transition: border .2s ease-in, background .2s ease-in;
+            background-color: $buttonBackground;
+            transition: border .2s ease-in, background-color .2s ease-in;
             
             &:hover,
             &:focus {
@@ -128,18 +128,18 @@ $titlePadding: 10px;
                     padding: 10px 0px;
                     border-bottom: 1px solid black;
                     cursor: pointer;
-                    transition: background .2s ease-in;
+                    transition: background-color .2s ease-in;
                     
                     &:last-child {
                         border-bottom: none;
                     }
                     
                     &:nth-child(even) {
-                        background: rgba(black, .25);
+                        background-color: rgba(black, .25);
                     }
                     
                     &:nth-child(odd) {
-                        background: rgba(black, .1);
+                        background-color: rgba(black, .1);
                     }
                     
                     .friend-icon,

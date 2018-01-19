@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var runSequence = require('run-sequence');
-var runElectron = require("gulp-run-electron");
+var runElectron = require('gulp-run-electron');
 var lbAngular = require('gulp-loopback-sdk-angular');
 var rename = require('gulp-rename');
 var path = require('path');
@@ -135,8 +135,8 @@ gulp.task('js:app:concat', function () {
         '!' + paths.build + 'js/vendor',
         '!' + paths.build + 'js/vendor/**'
     ])
-    .pipe(concat('app.js'))
-    .pipe(gulp.dest(paths.dist + 'js'));
+        .pipe(concat('app.js'))
+        .pipe(gulp.dest(paths.dist + 'js'));
 });
 
 // js - app - watch
@@ -182,8 +182,8 @@ gulp.task('js:vendor:concat', function () {
         paths.build + 'js/vendor/angular-cookies.js',
         paths.build + 'js/vendor/live-set.js',
     ])
-    .pipe(concat('vendor.js'))
-    .pipe(gulp.dest(paths.dist + 'js'));
+        .pipe(concat('vendor.js'))
+        .pipe(gulp.dest(paths.dist + 'js'));
 });
 
 // img
@@ -231,12 +231,12 @@ gulp.task('lb-ng:build', function () {
             apiUrl: 'http://localhost:3000/api'
         }))
         .pipe(rename('lb-services.js'))
-        .pipe(gulp.dest(paths.dist + 'js'))
+        .pipe(gulp.dest(paths.dist + 'js'));
 });
 
 // lb services - clean
 gulp.task('lb-ng:clean', function () {
-    return del(path.join(paths.dist + 'js', "*lb-services.js"))
+    return del(path.join(paths.dist + 'js', '*lb-services.js'));
 });
 
 // default gulp

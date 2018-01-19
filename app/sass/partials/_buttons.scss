@@ -13,12 +13,12 @@ $buttonBackgroundDisabled: rgba(white, .1);
     line-height: 20px;
     text-transform: capitalize;
     border: 2px solid rgba(255,255,255,.3);
-    background: $buttonBackground;
+    background-color: $buttonBackground;
     width: 300px;
     opacity: 1;
 
     outline: none;
-    transition: background .2s ease-in, border .2s ease-in;
+    transition: background-color .2s ease-in, border .2s ease-in;
     
     &:hover,
     &:focus {
