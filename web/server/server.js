@@ -22,7 +22,7 @@ async.series([
 			// MIXIN PATHS ARE ALL RELATIVE TO root/server
 			"mixinSources": [path.join(__dirname, "mixins"), path.join(__dirname, "..", "common", "mixins")]
 		};
-        
+
         // generate boot options with modules included
 		moduleLoader.generateBootOptions(app, options, function (err, bootOptions) {
 			if (err) {
@@ -36,7 +36,7 @@ async.series([
         console.log("[ERROR] Unable to run server: ", err);
         return;
     }
-    
+
     // don't run server if being included
     if (isMain) {
         app.start();

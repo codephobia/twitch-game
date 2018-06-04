@@ -20,22 +20,12 @@
                 Online
             </div>
             <div class="friends-wrapper">
-                <div class="friend">
+                <div class="friend" ng-repeat="friend in friends.online track by $index">
                     <div class="friend-icon">
-                        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/codephobia-profile_image-0e9bde2f38dddb8c-70x70.jpeg" alt="codephobia">
+                        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/codephobia-profile_image-0e9bde2f38dddb8c-70x70.jpeg" ng-alt="{{friend.username | username}}">
                     </div><!--
                     --><div class="friend-info">
-                        <h1>codephobia</h1>
-                        <h2>Title Screen</h2>
-                    </div><!--
-                    --><div class="friend-status"></div>
-                </div>
-                <div class="friend">
-                    <div class="friend-icon">
-                        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/codephobia-profile_image-0e9bde2f38dddb8c-70x70.jpeg" alt="codephobia">
-                    </div><!--
-                    --><div class="friend-info">
-                        <h1>codephosdasdasdasdasdasdasbia</h1>
+                        <h1>{{friend.username | username}}</h1>
                         <h2>Title Screen</h2>
                     </div><!--
                     --><div class="friend-status"></div>
@@ -47,22 +37,12 @@
                 Offline
             </div>
             <div class="friends-wrapper">
-                <div class="friend">
+                <div class="friend" ng-repeat="friend in friends.offline track by $index">
                     <div class="friend-icon">
-                        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/codephobia-profile_image-0e9bde2f38dddb8c-70x70.jpeg" alt="codephobia">
+                        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/codephobia-profile_image-0e9bde2f38dddb8c-70x70.jpeg" ng-alt="{{friend.username | username}}">
                     </div><!--
                     --><div class="friend-info">
-                        <h1>codephobia</h1>
-                        <h2>2 days ago</h2>
-                    </div><!--
-                    --><div class="friend-status"></div>
-                </div>
-                <div class="friend">
-                    <div class="friend-icon">
-                        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/codephobia-profile_image-0e9bde2f38dddb8c-70x70.jpeg" alt="codephobia">
-                    </div><!--
-                    --><div class="friend-info">
-                        <h1>codephobia</h1>
+                        <h1>{{friend.username | username}}</h1>
                         <h2>2 days ago</h2>
                     </div><!--
                     --><div class="friend-status"></div>

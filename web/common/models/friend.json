@@ -1,0 +1,36 @@
+{
+	"name": "friend",
+	"plural": "friends",
+	"base": "PersistedModel",
+	"strict": true,
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+    "active": {
+      "type": "boolean",
+      "default": false
+    }
+	},
+	"relations": {
+		"user": {
+			"type": "belongsTo",
+			"model": "user",
+			"foreignKey": "userId",
+			"options": {
+				"disableInclude": true
+			}
+    },
+    "friend": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "friendId"
+    }
+	},
+	"acls": [],
+	"validations": [],
+	"mixins": {
+	},
+	"methods": []
+}

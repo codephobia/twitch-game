@@ -1,48 +1,60 @@
 {
-	"name": "user",
-	"plural": "users",
-	"base": "User",
-	"strict": true,
-	"idInjection": true,
-	"options": {
-		"validateUpsert": true
-	},
-	"properties": {
-		"realm": false,
-		"username": {
-			"type": "String"
-		},
-		"email": {
-			"type": "String"
-		},
-		"active": {
-			"type": "Boolean",
-			"default": true
-		}
-	},
-	"hidden": [
-		"password",
-		"emailVerified"
-	],
-	"relations": {
-		"accessTokens": {
-			"type": "hasMany",
-			"model": "accessToken",
-			"foreignKey": "userId",
-			"options": {
-				"disableInclude": true
-			}
-		},
-        "avatar": {
-            "type": "hasOne",
-            "model": "avatar",
-            "foreignKey": "avatarId"
-        }
-	},
-	"acls": [
-	],
-	"validations": [],
-	"mixins": {
-	},
-	"methods": []
+  "name": "user",
+  "plural": "users",
+  "base": "User",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "realm": false,
+    "username": {
+      "type": "String"
+    },
+    "email": {
+      "type": "String"
+    },
+    "active": {
+      "type": "Boolean",
+      "default": true
+    }
+  },
+  "hidden": [
+    "password",
+    "emailVerified"
+  ],
+  "relations": {
+    "accessTokens": {
+      "type": "hasMany",
+      "model": "accessToken",
+      "foreignKey": "userId",
+      "options": {
+        "disableInclude": true
+      }
+    },
+    "avatar": {
+      "type": "hasOne",
+      "model": "avatar",
+      "foreignKey": "avatarId"
+    },
+    "friends": {
+      "type": "hasMany",
+      "model": "user",
+      "foreignKey": "userId",
+      "through": "friend",
+      "keyThrough": "friendId"
+    }
+  },
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": "__get__friends"
+    }
+  ],
+  "validations": [],
+  "mixins": {},
+  "methods": []
 }

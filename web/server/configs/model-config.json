@@ -55,6 +55,10 @@
     "dataSource": "mongodb",
     "public": true
   },
+  "friend": {
+    "dataSource": "mongodb",
+    "public": true
+  },
   "lobbyServer": {
     "dataSource": "lobby-server",
     "public": false
