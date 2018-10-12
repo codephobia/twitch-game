@@ -1,0 +1,21 @@
+button {
+    border: none;
+}
+
+button,
+input {
+    outline: none;
+}
+
+.md-errors-spacer {
+    display: none !important;
+}
+
+md-input-container {
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}

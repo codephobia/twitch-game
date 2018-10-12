@@ -1,9 +1,16 @@
-app/node_modules
-app/vendor
-app/build
+client/node_modules
+client/build
+
+app-old/node_modules
+app-old/vendor
+app-old/build
 
 web/node_modules
 web/vendor
 web/build
 
 server/server.exe
+
+# games
+games/**/node_modules
+games/**/dist

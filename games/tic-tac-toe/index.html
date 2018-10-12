@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Tic Tac Toe</title>
+    <script src="game.js"></script>
+</head>
+
+<script>
+    function onLoad() {
+        const event = new Event('game-init');
+        window.dispatchEvent(event);
+    }
+</script>
+
+<body onload="onLoad()">
+    <div class="container">
+        <div id="game"></div>
+    </div>
+</body>
+
+</html>

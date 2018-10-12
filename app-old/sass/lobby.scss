@@ -1,0 +1,444 @@
+@import 'partials/colors';
+@import 'partials/inputs';
+@import 'partials/menus';
+@import 'partials/avatars';
+
+.lobbies {
+    
+    .game-title-bar {
+        position: relative;
+
+        .app-back {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            padding: 10px;
+
+            .btn-app-back {
+                color: rgba(255,255,255,.3);
+                transition: color .2s ease-in;
+                font-size: 30px;
+                background-color: transparent;
+
+                &:hover {
+                    color: rgba(255,255,255,.8);
+                }
+            }/* btn-app-back */
+        }/* app-back */
+
+        .game-title {
+            text-align: center;
+            font-size: 25px;
+            color: white;
+            padding: 10px 0px;
+            text-transform: uppercase;
+        }
+    }/* game-title-bar */
+    
+    .lobby-create {
+        
+        .section-title {
+            margin: 20px 20px 0px 20px;
+            font-size: 15px;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        .game-type {
+            margin: 20px 20px 0px 20px;
+            
+            .game {
+                margin: 0px 20px 20px 0px;
+                display: inline-block;
+                width: 176px;
+                height: 112px;
+                background: rgba(0,0,0,.2);
+                border: 2px solid rgba(255,255,255,.3);
+                box-shadow: 0px 0px 5px rgba(0,0,0,.4);
+                
+                text-align: center;
+                line-height: 112px;
+                font-size: 15px;
+                color: rgba(255,255,255,.3);
+                
+                transition: border .2s ease-in, color .2s ease-in;
+                cursor: pointer;
+                
+                &:nth-child(4n) {
+                    margin-right: 0px;
+                }
+                
+                &.active {
+                    border: 2px solid rgba(255,255,255,.8);
+                    color: rgba(255,255,255,.8);
+                }
+            }/* game */
+        }/* game-type */
+        
+        .lobby-name {
+            margin: 0px 20px 20px;
+            
+            md-input-container {
+                @extend .app-input;
+            }
+        }
+        
+        .lobby-settings {
+            margin: 0px 20px 20px;
+            text-align: center;
+            
+            md-checkbox {
+                @extend .app-checkbox;
+            }
+        }
+        
+        .lobby-submit {
+            text-align: center;
+        }
+    }/* lobby-create */
+    
+    .lobby-join {
+        
+        .section-title {
+            margin: 20px 20px 50px 20px;
+            font-size: 15px;
+            color: white;
+            text-transform: uppercase;
+        }
+                
+        .lobby-code {
+            margin: 0px 20px 20px 20px;
+            
+            md-input-container {
+                @extend .app-input;
+            }
+            
+            input {
+                text-transform: uppercase;
+            }
+        }
+        
+        .lobby-submit {
+            text-align: center;
+        }
+    }/* lobby-create */
+    
+    .lobby {
+        
+        .lobby-connecting {
+            .message {
+                position: relative;
+                padding: 0px 30px 0px 0px;
+                color: white;
+                font-size: 20px;
+                line-height: 20px;
+                
+                i {
+                    position: absolute;
+                    top: 0px;
+                    right: 0px;
+                }
+            }
+        }
+        
+        .game-name {
+            margin: 50px 20px 20px;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .game-code {
+            margin: 20px;
+            color: white;
+            font-size: 40px;
+            text-align: center;
+            text-transform: uppercase;
+            
+            div {
+                margin: 0 auto;
+                display: inline-block;
+                filter: blur(0px);
+                transition: filter .1s ease-in;
+                outline: none;
+                cursor: pointer;
+
+                &.blurred {
+                    filter: blur(20px);
+                }
+            }
+        }
+        
+        .player-slots-wrapper {
+            margin: 20px 20px 50px;
+            
+            .player-slots {
+                margin: 0px;
+                text-align: center;
+                
+                .player-slot {
+                    margin-right: 20px;
+                    list-style: none;
+                    opacity: 0.3;
+                    
+                    &:nth-child(8n) {
+                        margin-right: 0px;
+                    }
+                    
+                    .player-leader {
+                        margin: 0px 0px 10px;
+                        width: 100%;
+                        height: 15px;
+                        
+                        &.is-leader {
+                            background: url(../img/leader.png) no-repeat center center;
+                        }
+                    }
+                    
+                    .player-wrapper {
+                        outline: none;
+                        
+                        .player-avatar-wrapper {
+                            position: relative;
+                            display: inline-block;
+                            text-align: center;
+                            width: 60px;
+                            height: 100px;
+
+                            .player-avatar {
+                                position: absolute;
+                            }
+
+                            .locked {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                margin-top: -10px;
+                                margin-left: -10px;
+                                width: 20px;
+                                height: 20px;
+                                font-size: 20px;
+                                line-height: 20px;
+                                text-align: center;
+                                color: white;
+                            }
+                        }
+
+                        .player-username {
+                            margin: 10px 0px 0px;
+                            color: white;
+                            font-size: 10px;
+                            text-align: center;
+                            text-transform: uppercase;
+                        }
+                    }
+                    
+                    &:not(.slot-filled) {
+                        .player-wrapper {
+                            .player-avatar-wrapper {
+                                border: 2px solid white;
+                                border-radius: 50%;
+                                margin: 34px 0px 6px;
+                                height: 60px;
+                                
+                                &.purple {
+                                    border-color: $avatarPurple;
+                                    
+                                    .locked {
+                                        color: $avatarPurple;
+                                    }
+                                }
+                                
+                                &.blue {
+                                    border-color: $avatarBlue;
+
+                                    .locked {
+                                        color: $avatarBlue;
+                                    }
+                                }
+                                
+                                &.pink {
+                                    border-color: $avatarPink;
+                                    
+                                    .locked {
+                                        color: $avatarPink;
+                                    }
+                                }
+                                
+                                &.orange {
+                                    border-color: $avatarOrange;
+                                    
+                                    .locked {
+                                        color: $avatarOrange;
+                                    }
+                                }
+                                
+                                &.green {
+                                    border-color: $avatarGreen;
+                                    
+                                    .locked {
+                                        color: $avatarGreen;
+                                    }
+                                }
+                                
+                                &.brown {
+                                    border-color: $avatarBrown;
+                                    
+                                    .locked {
+                                        color: $avatarBrown;
+                                    }
+                                }
+                                
+                                &.yellow {
+                                    border-color: $avatarYellow;
+                                    
+                                    .locked {
+                                        color: $avatarYellow;
+                                    }
+                                }
+                                
+                                &.red {
+                                    border-color: $avatarRed;
+                                    
+                                    .locked {
+                                        color: $avatarRed;
+                                    }
+                                }
+                                
+                                .player-avatar {
+                                    top: 34px;
+                                    left: 0px;
+                                    width: 60px;
+                                    height: 60px;
+                                }
+                            }
+                        }
+                    }
+                    
+                    &.slot-filled {
+                        opacity: 1;
+                        
+                        .player-wrapper {
+                            .player-avatar-wrapper {
+                                .player-avatar {
+                                    position: absolute;
+                                    top: 0px;
+                                    left: -34px;
+                                    width: 128px;
+                                    height: 128px;
+
+                                    @extend .app-avatar;
+                                }
+                            }
+                        }
+                    }/* &.slot-filled */
+                    
+
+                }/* .player-slot */
+            }
+        }
+        
+        .lobby-settings {
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .lobby-submit {
+            text-align: center;
+        }
+        
+    }
+    
+    .lobby-find {
+        .section-title {
+            margin: 20px 20px 50px 20px;
+            font-size: 15px;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        .filters {
+            margin: 0 20px 20px;
+            text-align: right;
+            
+            .search {
+                @extend .app-input;
+                @extend .app-input-sm;
+                @extend .app-input-search;
+                
+                input {
+                    padding-right: 25px;
+                }
+            }
+        }
+        
+        .lobby-list {
+            margin: 0px 20px;
+            
+            table {
+                border-collapse: collapse;
+                border: 2px solid white;
+                
+                thead {
+                    background: white;
+                    
+                    tr {
+                        th {
+                            padding: 6px 10px;
+                            color: black;
+                            font-size: 15px;
+                            white-space: nowrap;
+
+                            &.name {
+                                width: 100%;
+                            }
+
+                            &.name,
+                            &.game {
+                                text-align: left;
+                            }
+                        }
+                    }
+                }
+                
+                tbody {
+                    tr {
+                        border-bottom: 2px solid white;
+                        background: rgba(255,255,255,.1);
+                        transition: background 0.1s ease-in;
+                        
+                        &:last-child {
+                            border-bottom: none;
+                        }
+                        
+                        &:hover {
+                            background: rgba(255,255,255,.3);
+                        }
+                        
+                        td {
+                            padding: 6px 10px;
+                            white-space: nowrap;
+                            color: white;
+                            cursor: pointer;
+                            
+                            &.name {
+                                width: 100%;
+                            }
+
+                            &.players,
+                            &.locked {
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+}/* lobbies */
+
+.player-context-menu {
+    @extend .app-context-menu;
+}

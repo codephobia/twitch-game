@@ -1,0 +1,31 @@
+// @import '~sass/partials/reset';
+// @import '~sass/partials/buttons';
+// @import '~sass/partials/margins';
+
+*,
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    font-family: 'Open Sans';
+}
+
+html,
+body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100%;
+    overflow: hidden;
+}
+
+body {
+    user-select: none;
+    background: url(assets/images/bg.png) no-repeat center center;
+    background-size: cover;
+}
+
+.root {
+    position: relative;
+}

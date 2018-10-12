@@ -1,0 +1,32 @@
+{
+  "name": "twitch-game",
+  "description": "",
+  "main": "main.js",
+  "authors": [
+    "Codephobia"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/codephobia/twitch-game",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "angular": "^1.6.7",
+    "angular-ui-router": "^1.0.11",
+    "angular-material": "^1.1.5",
+    "font-awesome": "fontawesome#^4.7.0",
+    "angular-resource": "^1.6.7",
+    "angular-cookies": "^1.6.7",
+    "jquery": "^3.2.1",
+    "async": "^2.6.0",
+    "angular-live-set": "*",
+    "utatti-perfect-scrollbar": "^1.3.0"
+  }
+}

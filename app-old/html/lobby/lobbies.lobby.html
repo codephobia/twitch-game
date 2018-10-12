@@ -1,0 +1,74 @@
+<div class="lobby" layout="column" layout-fill>
+    <div class="game-title-bar">
+        <div class="app-back">
+            <button class="btn-app-back" ng-click="lobby.isConnected() && lobby.part()">
+                <i class="fa fa-chevron-left"></i>
+            </button>
+        </div>
+        <h1 class="game-title">Game Title</h1>
+    </div>
+    <div class="lobby-connecting" layout="column" layout-align="center center" flex ng-if="!lobby.isConnected()">
+        <div class="message">
+            <i class="fa fa-refresh fa-spin"></i>
+            Joining Lobby
+        </div>
+    </div>
+    <div ng-if="lobby.isConnected()">
+        <div class="game-name">
+            {{lobby.getGame().name}}
+        </div>
+        <div class="game-code">
+            <div ng-class="{ 'blurred': lobby.getLobbyCodeBlur() }" ng-click="lobby.toggleLobbyCodeBlur()">
+                {{lobby.getLobbyCode()}}
+            </div>
+        </div>
+        <div class="player-slots-wrapper" layout="row" layout-align="center start">
+            <ul class="player-slots" layout="row" layout-align="stretch start" flex>
+                <li class="player-slot" ng-repeat="slot in lobby.getSlots() | orderBy track by $index" layout="column" layout-align="center center" flex ng-class="{ 'slot-filled': lobby.getPlayer($index) }">
+                    <div class="player-leader" ng-class="{ 'is-leader': lobby.getPlayer($index).isLeader }"></div>
+
+                    <md-menu mousepoint-menu>
+                        <div class="player-wrapper" ng-click="" app-context-menu="!!lobby.getPlayer($index) && lobby.getCurrentPlayer().userId !== lobby.getPlayer($index).userId && $mdOpenMousepointMenu($event)">
+                            <div class="player-avatar-wrapper {{lobby.getPlayerColorByIndex($index)}}">
+                                <div class="locked" ng-if="lobby.isLocked() && !lobby.getPlayer($index)">
+                                    <i class="fa fa-lock"></i>
+                                </div>
+                                <div class="player-avatar {{lobby.getPlayerAvatarShape($index)}} {{lobby.getPlayerColorByIndex($index)}}"></div>
+                            </div>
+                            <div class="player-username">
+                                <span ng-if="lobby.getPlayer($index).username">{{lobby.getPlayer($index).username | username}}</span>
+                                <span ng-if="!lobby.getPlayer($index).username">empty</span>
+                            </div>
+                        </div>
+                        <md-menu-content class="player-context-menu">
+                            <div class="player-context-menu-title">
+                                {{lobby.getUsernameByIndex($index) | username}}
+                            </div>
+                            <md-menu-item ng-if="lobby.playerIsLeader()">
+                                <button ng-click="lobby.promoteToLeader($index)">Promote to Leader</button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <button>Send Friend Request</button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="lobby.playerIsLeader()">
+                                <button ng-click="lobby.kickPlayer(lobby.getPlayer($index).userId)">Kick Player</button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                </li>
+            </ul>
+        </div>
+        <div class="lobby-settings">
+            <button class="btn-clear m-r-md" ng-click="lobby.togglePublic()" ng-if="lobby.playerIsLeader()">
+                <i class="fa m-r-sm" ng-class="{ 'fa-lock': !lobby.isPublic(), 'fa-unlock-alt': lobby.isPublic() }"></i><span ng-if="lobby.isPublic()">Public</span><span ng-if="!lobby.isPublic()">Private</span> Lobby
+            </button>
+            <button class="btn-clear" ng-click="lobby.toggleLocked()" ng-if="lobby.playerIsLeader()">
+                <i class="fa m-r-sm" ng-class="{ 'fa-lock': lobby.isLocked(), 'fa-unlock-alt': !lobby.isLocked() }"></i>Lobby <span ng-if="lobby.isLocked()">Locked</span><span ng-if="!lobby.isLocked()">Unlocked</span>
+            </button>
+        </div>
+        <div class="lobby-submit">
+            <button class="btn" ng-disabled="!lobby.canStart()" ng-if="lobby.playerIsLeader()" ng-click="lobby.gameStart()">Start Game</button>
+        </div>
+    </div>
+</div>

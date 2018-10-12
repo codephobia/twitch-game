@@ -1,0 +1,29 @@
+<div class="toolbar toolbar-bottom app-drag">
+    <ul class="toolbar-left">
+        <li>
+            <button class="btn-settings app-no-drag">
+                <i class="fa fa-gear"></i>
+            </button>
+        </li>
+    </ul>
+    <div class="toolbar-right" ng-if="isLoggedIn()">
+        <md-menu class="app-no-drag" md-offset="0 -80">
+            <button class="profile" ng-click="openMenu($mdMenu, $event)">
+                <div class="username">{{username() | username}}</div>
+                <div class="avatar {{avatar().shape}} purple"></div>
+            </button>
+            <md-menu-content class="profile-menu-content">
+                <md-menu-item>
+                    <button layout-fill class="menu-btn">
+                        Profile
+                    </button>
+                </md-menu-item>
+                <md-menu-item>
+                    <button layout-fill class="menu-btn" ng-click="logout()">
+                        Logout
+                    </button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </div>
+</div>

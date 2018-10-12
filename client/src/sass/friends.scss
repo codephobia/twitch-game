@@ -1,0 +1,317 @@
+@import 'partials/colors';
+@import 'partials/inputs';
+@import 'partials/buttons';
+
+$friendsWidth: 300px;
+$titleHeight: 30px;
+$titlePadding: 10px;
+
+.friends-list {
+    position: fixed;
+    width: $friendsWidth;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin-right: -$friendsWidth;
+    background: rgba(black, .5);
+
+    transition: margin-right .3s ease-in;
+    
+    .title {
+        position: relative;
+        height: $titleHeight;
+        background: white;
+        
+        .btn-friends-close {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: $titleHeight;
+            height: $titleHeight;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: rgba(black, .6);
+            transition: color .2s ease-in;
+            
+            &:hover {
+                color: rgba(black, 1);
+            }
+        }
+        h1 {
+            padding-left: $titlePadding;
+            padding-right: calc($titleHeight + $titlePadding);
+            color: black;
+            font-size: 20px;
+            text-transform: uppercase;
+            line-height: $titleHeight;
+        }
+    }
+    
+    .friends-list-toolbar {
+        padding: 10px;
+        
+        .btn-add-friend {
+            display: inline-block;
+            margin-right: 10px;
+            width: 90px;
+            height: 36px;
+            line-height: 32px;
+            color: white;
+            font-size: 15px;
+            
+            border: $inputBorder;
+            background-color: $buttonBackground;
+            transition: border .2s ease-in, background-color .2s ease-in;
+            
+            &:hover,
+            &:focus {
+                border: $inputBorderActive;
+                background: $buttonBackgroundActive;
+            }            
+        }
+        
+        .friend-search-container {
+            @extend .app-input;
+            @extend .app-input-sm;
+            @extend .app-input-search;
+            
+            display: inline-block;
+            width: 180px;
+        }
+    }
+    
+    .sections-wrapper {
+        position: absolute;
+        top: 86px;
+        right: 0px;
+        bottom: 0px;
+        width: $friendsWidth;
+        
+        .section {
+            .section-title {
+                position: relative;
+                padding: 2px 10px;
+                color: white;
+                font-size: 10px;
+                background: black;
+                height: 20px;
+                line-height: 20px;
+                outline: none;
+                cursor: pointer;
+                
+                &:after {
+                    position: absolute;
+                    top: 0px;
+                    right: 10px;
+                    font-family: 'FontAwesome';
+                    content: "\f078";
+                    color: white;
+                    transition: top .2s ease-in, transform .2s ease-in;
+                }
+            }
+            
+            &.open {
+                .section-title {
+                    &:after {
+                        top: 2px;
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+            
+            .friends-wrapper {
+                overflow: hidden;
+                transition: height .2s ease-in;
+                
+                .friend {
+                    padding: 10px 0px;
+                    border-bottom: 1px solid black;
+                    cursor: pointer;
+                    transition: background-color .2s ease-in;
+                    
+                    &:last-child {
+                        border-bottom: none;
+                    }
+                    
+                    &:nth-child(even) {
+                        background-color: rgba(black, .25);
+                    }
+                    
+                    &:nth-child(odd) {
+                        background-color: rgba(black, .1);
+                    }
+                    
+                    .friend-icon,
+                    .friend-info,
+                    .friend-status,
+                    .friend-actions {
+                        display: inline-block;
+                        vertical-align: top;
+                    }
+                    
+                    .friend-icon {
+                        margin-left: 10px;
+                        width: 45px;
+                        height: 45px;
+                        
+                        img {
+                            width: 45px;
+                            height: 45px;
+                            border-radius: 50%;
+                        }
+                    }
+                    
+                    .friend-info {
+                        padding: 5px 10px;
+                        width: 175px;
+                        
+                        h1,
+                        h2 {
+                            color: white;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                        
+                        h1 {
+                            font-size: 15px;
+                            line-height: 20px;
+                        }
+                        
+                        h2 {
+                            font-size: 10px;
+                            line-height: 15px;
+                            opacity: .7;
+                        }
+                    }
+                    
+                    .friend-status {
+                        width: 50px;
+                        height: 45px;
+                        position: relative;
+                        
+                        &:after {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            margin-top: -5px;
+                            margin-left: -5px;
+                            width: 10px;
+                            height: 10px;
+                            content: "";
+                            
+                            border-radius: 50%;
+                        }
+                    }
+                    
+                    .friend-actions {
+                        width: 70px;
+                        opacity: 0;
+                        transition: opacity .2s ease-in;
+                        
+                        .approve,
+                        .decline {
+                            margin: 10px 10px 10px 0px;
+                            display: inline-block;
+                            vertical-align: top;
+                            width: 25px;
+                            height: 25px;
+                            
+                            &:after {
+                                font-family: 'FontAwesome';
+                                color: white;
+                            }
+                        }
+                        
+                        .approve {
+                            background: rgba($successGreen, .8);
+                            
+                            &:hover {
+                                background: rgba($successGreen, 1);
+                            }
+                            
+                            &:after {
+                                content: "\f00c";
+                            }
+                        }
+                        
+                        .decline {
+                            background: rgba($errorRed, .8);
+                            
+                            &:hover {
+                                background: rgba($errorRed, 1);
+                            }
+                            
+                            &:after {
+                                content: "\f00d";
+                            }
+                        }
+                    }
+                    
+                    &:hover {
+                        background: rgba(white, .1);
+                        
+                        .friend-actions {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+            
+            &.online {
+                .friend-status {
+                    &:after {
+                        background: rgba($successGreen, 1);
+                    }
+                }
+            }
+            
+            &.offline {
+                .friend {
+                    .friend-icon,
+                    .friend-info {
+                        opacity: .4;
+                    }
+                    
+                    .friend-status {
+                        &:after {
+                            background: rgba($errorRed, 1);
+                        }
+                    }
+                }
+            }
+        
+            &.requests {
+                .friends-wrapper {
+                    .friend {
+                        .friend-info {
+                            width: 155px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// handle slide out of app
+.root {
+    margin-left: 0px;
+    transition: margin-left .3s ease-in;
+}
+
+// handle slide out of friends list
+body.friends-open {
+    .root {
+        margin-left: -$friendsWidth;
+    }
+    
+    .friends-list {
+        margin-right: 0px;
+    }
+    
+    .profile-menu-content {
+        margin-right: $friendsWidth;
+    }
+}
