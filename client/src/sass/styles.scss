@@ -1,6 +1,6 @@
-// @import '~sass/partials/reset';
-// @import '~sass/partials/buttons';
-// @import '~sass/partials/margins';
+@import './modules/reset';
+@import './modules/buttons';
+@import './modules/margins';
 
 *,
 html,
@@ -22,7 +22,7 @@ body {
 
 body {
     user-select: none;
-    background: url(assets/images/bg.png) no-repeat center center;
+    background: url(../assets/images/bg.png) no-repeat center center;
     background-size: cover;
 }
 
