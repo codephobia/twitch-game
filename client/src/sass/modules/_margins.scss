@@ -1,11 +1,4 @@
-$space: (
-    xs: 5px,
-    sm: 10px,
-    md: 15px,
-    lg: 20px,
-    xl: 30px,
-);
-
+$space: ( xs: 5px, sm: 10px, md: 15px, lg: 20px, xl: 30px, );
 @mixin marginSet($size) {
     .m-t-#{$size} {
         margin-top: map-get($space, $size);

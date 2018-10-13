@@ -1,3 +1,3 @@
 interface Window {
-  require: NodeRequire;
+    require: NodeRequire;
 }

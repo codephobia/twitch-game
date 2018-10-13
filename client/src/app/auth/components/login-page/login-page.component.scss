@@ -1,37 +1,32 @@
 @import '../../../../sass/modules/colors';
-
 :host {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .login {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-
-  .game-title {
-    margin-bottom: 50px;
-    color: #fff;
-    font-weight: 100;
-    letter-spacing: 1px;
-  }
-
-  .btn-login {
-    background: rgba($twitchPurple, .1);
-    cursor: pointer;
-
-    fa-icon {
-      margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    .game-title {
+        margin-bottom: 50px;
+        color: #fff;
+        font-weight: 100;
+        letter-spacing: 1px;
     }
-
-    &:hover,
-    &:focus {
-      background: rgba($twitchPurple, .4);
+    .btn-login {
+        background: rgba($twitchPurple, .1);
+        cursor: pointer;
+        fa-icon {
+            margin-right: 20px;
+        }
+        &:hover,
+        &:focus {
+            background: rgba($twitchPurple, .4);
+        }
     }
-  }
 }

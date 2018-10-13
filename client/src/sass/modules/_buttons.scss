@@ -1,10 +1,9 @@
 @import 'colors';
-
 $buttonBackground: rgba(white, .1);
 $buttonBackgroundActive: rgba(white, .4);
 $buttonBackgroundDisabled: rgba(white, .1);
-
 /* buttons */
+
 .btn {
     position: relative;
     padding: 20px;
@@ -12,20 +11,17 @@ $buttonBackgroundDisabled: rgba(white, .1);
     font-size: 20px;
     line-height: 20px;
     text-transform: capitalize;
-    border: 2px solid rgba(255,255,255,.3);
+    border: 2px solid rgba(255, 255, 255, .3);
     background-color: $buttonBackground;
     width: 300px;
     opacity: 1;
-
     outline: none;
     transition: background-color .2s ease-in, border .2s ease-in;
-    
     &:hover,
     &:focus {
-        border: 2px solid rgba(white,.8);
+        border: 2px solid rgba(white, .8);
         background: $buttonBackgroundActive;
     }
-    
     .loading {
         position: absolute;
         top: 50%;
@@ -33,13 +29,11 @@ $buttonBackgroundDisabled: rgba(white, .1);
         margin-top: -10px;
         padding-right: 20px;
     }
-    
     &:disabled {
         opacity: 0.5;
-        
         &:hover,
         &:focus {
-            border: 2px solid rgba(255,255,255,.3);
+            border: 2px solid rgba(255, 255, 255, .3);
             background: $buttonBackgroundDisabled;
         }
     }
@@ -47,7 +41,6 @@ $buttonBackgroundDisabled: rgba(white, .1);
 
 .btn-clear {
     color: white;
-    
     background: transparent;
     border: none;
     outline: none;

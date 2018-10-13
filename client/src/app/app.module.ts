@@ -8,16 +8,16 @@ import { AuthModule } from './auth/auth.module';
 import { routes } from './routes';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot(routes),
-    AuthModule.forRoot(),
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        RouterModule.forRoot(routes),
+        AuthModule.forRoot(),
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
