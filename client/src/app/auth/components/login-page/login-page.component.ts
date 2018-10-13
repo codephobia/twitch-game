@@ -11,7 +11,7 @@ import { LoginService } from '../../services/login.service';
 export class LoginPageComponent {
   faTwitch = faTwitch;
 
-  constructor(private login: LoginService) {}
+  constructor(private readonly login: LoginService) { }
 
   loginWnd(): void {
     this.login.loginWnd();
