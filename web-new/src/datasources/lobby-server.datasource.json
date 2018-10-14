@@ -1,0 +1,42 @@
+{
+    "name": "lobby-server",
+    "baseURL": "http://localhost:8080",
+    "connector": "rest",
+    "crud": false,
+    "operations": [
+        {
+            "template": {
+                "method": "POST",
+                "url": "/lobby",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json"
+                },
+                "body": {
+                    "lobby_id": "{lobbyId}",
+                    "lobby_name": "{lobbyName}",
+                    "lobby_code": "{lobbyCode}",
+                    "public": "{public}",
+                    "user_id": "{userId}",
+                    "game_id": "{gameId}",
+                    "game_name": "{gameName}",
+                    "game_slots_min": "{gameSlotsMin}",
+                    "game_slots_max": "{gameSlotsMax}"
+                }
+            },
+            "functions": {
+                "createLobby": [
+                    "lobbyId",
+                    "lobbyName",
+                    "lobbyCode",
+                    "public",
+                    "userId",
+                    "gameId",
+                    "gameName",
+                    "gameSlotsMin",
+                    "gameSlotsMax"
+                ]
+            }
+        }
+    ]
+}

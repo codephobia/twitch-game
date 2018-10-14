@@ -1,0 +1,64 @@
+{
+  "name": "web-new",
+  "version": "1.0.0",
+  "description": "web",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.9"
+  },
+  "typings": "./typings/index",
+  "scripts": {
+    "build:apidocs": "lb-apidocs",
+    "build": "lb-tsc es2017 --outDir dist",
+    "build:watch": "lb-tsc --watch",
+    "clean": "lb-clean dist",
+    "lint": "npm run tslint",
+    "lint:fix": "npm run tslint:fix",
+    "tslint": "lb-tslint",
+    "tslint:fix": "npm run tslint -- --fix",
+    "pretest": "npm run clean && npm run build",
+    "posttest": "npm run lint",
+    "prestart": "npm run build",
+    "start": "node .",
+    "prepublishOnly": "npm run test"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "",
+  "license": "",
+  "files": [
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "dist/src",
+    "dist/index*",
+    "src"
+  ],
+  "dependencies": {
+    "@loopback/authentication": "^1.0.0",
+    "@loopback/boot": "^1.0.0",
+    "@loopback/context": "^1.0.0",
+    "@loopback/core": "^1.0.0",
+    "@loopback/openapi-v3": "^1.0.0",
+    "@loopback/repository": "^1.0.0",
+    "@loopback/rest": "^1.0.0",
+    "@loopback/service-proxy": "^1.0.0",
+    "loopback-connector-mongodb": "^3.8.0",
+    "loopback-connector-rest": "^3.3.0",
+    "passport": "^0.4.0",
+    "passport-http": "^0.3.0",
+    "passport-twitchtv": "^0.1.4"
+  },
+  "devDependencies": {
+    "@loopback/build": "^1.0.0",
+    "@loopback/testlab": "^1.0.0",
+    "@types/node": "^10.11.2",
+    "@types/passport": "^0.4.6",
+    "@types/passport-http": "^0.3.6"
+  }
+}

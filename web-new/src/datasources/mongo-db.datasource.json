@@ -1,0 +1,14 @@
+{
+    "name": "MongoDB",
+    "connector": "mongodb",
+    "host": "localhost",
+    "port": 27017,
+    "user": "",
+    "password": "",
+    "database": "twitch-game",
+    "useNewUrlParser": true,
+    "auto_reconnect": true,
+    "reconnectTries": 100,
+    "reconnectInterval": 1000,
+    "allowExtendedOperators": true
+}

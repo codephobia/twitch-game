@@ -1,0 +1,7 @@
+{
+    "name": "WebApplication",
+    "version": "1.0.0",
+    "globalDependencies": {
+        "passport-twitchtv": "file:typings/passport-twitchtv/index.d.ts"
+    }
+}
