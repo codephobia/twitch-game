@@ -10,13 +10,12 @@
     "exclude": [
         "node_modules/**",
         "packages/*/node_modules/**",
-        "src/typings",
         "dist"
     ],
     "compilerOptions": {
         "typeRoots": [
             "node_modules/@types",
             "./src/typings"
-        ]
+        ],
     }
 }

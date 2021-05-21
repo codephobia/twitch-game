@@ -2,7 +2,7 @@ angular.module('app.services')
     .service('LoginService', [
         '$rootScope',
         '$state',
-        '$cookieStore',
+        '$cookies',
         'User',
         'Avatar',
         'LoopBackAuth',

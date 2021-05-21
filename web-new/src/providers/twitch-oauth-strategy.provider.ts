@@ -4,11 +4,10 @@ import {
     AuthenticationBindings,
     AuthenticationMetadata,
 } from '@loopback/authentication';
-import { Strategy as TwitchStrategy } from 'passport-twitchtv';
+import { Strategy as TwitchStrategy, Profile } from 'passport-twitchtv';
 
 import { User } from '../models';
 import { UserRepository } from '../repositories';
-import { Profile } from '../typings';
 
 const clientID = process.env.TEST_TWITCH_CLIENT_ID || "";
 const clientSecret = process.env.TEST_TWITCH_CLIENT_SECRET || "";

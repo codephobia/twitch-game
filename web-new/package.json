@@ -52,7 +52,8 @@
     "loopback-connector-rest": "^3.3.0",
     "passport": "^0.4.0",
     "passport-http": "^0.3.0",
-    "passport-twitchtv": "^0.1.4"
+    "passport-twitchtv": "^0.1.4",
+    "typescript": "^3.1.3"
   },
   "devDependencies": {
     "@loopback/build": "^1.0.0",
